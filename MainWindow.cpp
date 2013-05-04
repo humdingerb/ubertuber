@@ -35,10 +35,10 @@
 
 
 BString validAddress[] = {
-	"youtube.com/watch", "youtube.com/embed", "youtu.be", "metacafe.com/watch",
-	"dailymotion.com", "video.google.com", "photobucket.com", "video.yahoo.com",
-	"depositfiles.com", "facebook.com/video", "vimeo.com", "blip.tv",
-	"escapistmagazine.com/videos/view",
+	"youtube.com/watch", "youtube.com/embed", "youtu.be", "youtube-nocookie.com",
+	"metacafe.com/watch", "dailymotion.com", "video.google.com", "photobucket.com", 
+	"video.yahoo.com", "depositfiles.com", "facebook.com/video", "vimeo.com",
+	"blip.tv", "escapistmagazine.com/videos/view",
 	0
 };
 
