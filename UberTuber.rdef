@@ -5,7 +5,7 @@ resource app_flags B_SINGLE_LAUNCH;
 resource app_version {
 	major  = 0,
 	middle = 9,
-	minor  = 5,
+	minor  = 6,
 
 	/* 0 = development	1 = alpha			2 = beta
 	   3 = gamma		4 = golden master	5 = final */
@@ -14,7 +14,7 @@ resource app_version {
 	internal = 0,
 
 	short_info = "YouTube video downloader",
-	long_info  = "Stream videos with MediaPlayer"
+	long_info  = "A tool to view videos from sites like youtube."
 };
 
 resource vector_icon {

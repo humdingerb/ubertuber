@@ -104,38 +104,6 @@ MainWindow::MainWindow()
 	PostMessage(B_CLIPBOARD_CHANGED);
 
 	fURLBox->SetText("");
-	
-	_CheckForPython();
-}
-
-
-void
-MainWindow::_CheckForPython()
-{
-	printf("Check for Python...\n");
-
-	BString* command = new BString(
-	"if [ ! -e /boot/common/bin/python ] ; then "
-	"alert --stop \"You'll need 'Python' to use UberTuber. "
-	"This is a 22 MiB download and will take some time...\" "
-	"\"Cancel\" \"Install Python now\" ; "
-	"if [ $? -eq 0 ] ; then "
-	"exit ;"
-	"else "
-	"hey application/x-vnd.UberTuber ipyt ; "
-	"/boot/system/bin/installoptionalpackage python ; "
-	"hey application/x-vnd.UberTuber irdy ; "
-	"fi ; "
-	"fi ; ");
-
-	thread_id installerThread = spawn_thread(_call_script, "Python installer",
-		B_LOW_PRIORITY, command);
-
-	if (installerThread < B_OK)
-		return;
-
-	resume_thread(installerThread);
-	return;
 }
 
 
@@ -481,11 +449,6 @@ MainWindow::MessageReceived(BMessage* msg)
 			SetStatus("Updating script...");
 			break;
 		}
-		case statINSTPYTH:
-		{
-			SetStatus("Installing Python...");
-			break;
-		}
 		case statINSTRDY:
 		{
 			SetStatus("Installation finished");
@@ -550,7 +513,7 @@ MainWindow::QuitRequested()
 void
 MainWindow::KillThread()
 {
-	BString threadname("/boot/common/bin/python %APP%/youtube-dl "
+	BString threadname("/bin/python %APP%/youtube-dl "
 		"--max-quality=35 --continue -o '%(title)s'");
 	threadname.ReplaceAll("%APP%", fAppDir->String());
 	threadname.Truncate(63);
@@ -633,7 +596,7 @@ void
 MainWindow::_GetDirectories()
 {
 	BPath path;
-	find_directory(B_COMMON_TEMP_DIRECTORY, &path);
+	find_directory(B_SYSTEM_TEMP_DIRECTORY, &path);
 	fTempDir = new BString(path.Path());
 	fTempDir->Append("/ubertuber");
 
@@ -667,20 +630,7 @@ MainWindow::GetClipboard()
 void
 MainWindow::GetTitle()
 {
-	BString command(
-	"if [ ! -e /boot/common/bin/python ] ; then "
-	"alert --stop \"You'll need 'Python' to use UberTuber. "
-	"This is a 22 MiB download and will take a some time...\" "
-	"\"Cancel\" \"Install Python now\" ; "
-	"if [ $? -eq 0 ] ; then "
-	"exit ;"
-	"else "
-	"hey application/x-vnd.UberTuber ipyt ; "
-	"/boot/system/bin/installoptionalpackage python ; "
-	"hey application/x-vnd.UberTuber irdy ; "
-	"fi ; "
-	"fi ; "
-	"python %APP%/youtube-dl --get-title %URL%");
+	BString command("python %APP%/youtube-dl --get-title %URL%");
 	command.ReplaceAll("%APP%", fAppDir->String());
 	command.ReplaceAll("%URL%", fURL->String());
 	command.Append(" 2>&1 | tail -n 1");  // also get output from error out
@@ -694,7 +644,7 @@ MainWindow::GetTitle()
 
 	/* strip trailing newline */
 	for (int i = 0; (unsigned) i < strlen(title); i++) {
-		if (title[i] == '\n' || title[i] == '\r')
+		if (title[i] == '\n' || title[i] == '\r' )
 			title[i] = '\0';
 	}
 	fClipTitle = title;			// saving original title
@@ -704,6 +654,11 @@ MainWindow::GetTitle()
 	/* strip unwanted characters */
 	BString stripTitle = title;
 	stripTitle.ReplaceAll("\"", "\\\"");
+	stripTitle.ReplaceAll("/", "_");
+	stripTitle.ReplaceAll("\?", "");
+	stripTitle.ReplaceAll(":", " -");
+	stripTitle.ReplaceAll("||", "_");
+	stripTitle.ReplaceAll("|", "_");
 	fTitle = new BString(stripTitle, strlen(stripTitle));
 	
 	return;
@@ -752,7 +707,7 @@ MainWindow::GetClip()
 	"fi ; "
 	"exit");
 
-	BString threadname("/boot/common/bin/python %APP%/youtube-dl "
+	BString threadname("/bin/python %APP%/youtube-dl "
 		"--max-quality=35 --continue -o '%(title)s'");
 	threadname.ReplaceAll("%APP%", fAppDir->String());
 	threadname.Truncate(63);
@@ -822,6 +777,8 @@ MainWindow::PlayClip()
 		command->RemoveAll("sleep 2 ; ");
 
 	command->ReplaceAll("%TITLE%", fTitle->String());
+
+printf("\n\nfilename: %s\n\n", fTitle->String());
 
 	// Truncate MediaPlayer thread names
 	BString title = fTitle->String();

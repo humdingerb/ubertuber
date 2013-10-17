@@ -34,7 +34,6 @@ enum {
 	statFINISH_UPDATE	= 'ufin',
 	statERROR			= 'erro',
 	statPLAYING			= 'play',
-	statINSTPYTH		= 'ipyt',
 	statINSTRDY			= 'irdy',
 
 	msgABORT	= 'abor',
@@ -60,7 +59,6 @@ private:
 		void			_BuildMenu();
 		void			_BuildLayout();
 		void			_GetDirectories();
-		void			_CheckForPython();
 
 		bool			GetClip();
 		void			GetTitle();

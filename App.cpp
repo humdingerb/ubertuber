@@ -39,7 +39,6 @@ App::MessageReceived(BMessage* msg)
 		case statFINISH_UPDATE:
 		case statPLAYING:
 		case statUPDATING:
-		case statINSTPYTH:
 		case statINSTRDY:
 		{
 			msg->PrintToStream();
@@ -58,10 +57,10 @@ App::MessageReceived(BMessage* msg)
 void
 App::AboutRequested()
 {
-	BAlert *alert = new BAlert("about", "UberTuber   v0.9.4\n"
+	BAlert *alert = new BAlert("about", "UberTuber   v0.9.6\n"
 		"\twritten by Humdinger\n"
 		"\tbased on ideas of Leszek's YAVTD\n"
-		"\tCopyright 2011-2012\n\n"
+		"\tCopyright 2011-2013\n\n"
 		"UberTuber uses a script to download YouTube videos.\n"
 		"Clips can be saved or played back directly. UberTuber monitors "
 		"the system clipboard for newly copied URLs and has an 'Auto-play' "
