@@ -61,6 +61,7 @@ private:
 		void			_GetDirectories();
 
 		bool			GetClip();
+		void			GetFilename();
 		void			GetTitle();
 		BString			GetClipboard();
 		void			KillThread();
@@ -92,7 +93,7 @@ private:
 
 		BString*		fAppDir;
 		BString			fClipTitle;
-		BString*		fTitle;
+		BString*		fFilename;
 		BString*		fSaveDir;
 		BString*		fTempDir;
 		BString*		fURL;

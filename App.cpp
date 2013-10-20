@@ -57,7 +57,7 @@ App::MessageReceived(BMessage* msg)
 void
 App::AboutRequested()
 {
-	BAlert *alert = new BAlert("about", "UberTuber   v0.9.6\n"
+	BAlert *alert = new BAlert("about", "UberTuber   v0.9.7\n"
 		"\twritten by Humdinger\n"
 		"\tbased on ideas of Leszek's YAVTD\n"
 		"\tCopyright 2011-2013\n\n"

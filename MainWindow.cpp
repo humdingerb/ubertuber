@@ -514,7 +514,7 @@ void
 MainWindow::KillThread()
 {
 	BString threadname("/bin/python %APP%/youtube-dl "
-		"--max-quality=35 --continue -o '%(title)s'");
+		"--max-quality=22 --continue --restrict-filenames %URL%");
 	threadname.ReplaceAll("%APP%", fAppDir->String());
 	threadname.Truncate(63);
 
@@ -621,7 +621,6 @@ MainWindow::GetClipboard()
 				(const void **)&text, &textLen);
 		be_clipboard->Unlock();
 	}
-
 	BString clipboardString(text, textLen);
 	return clipboardString;
 }
@@ -631,6 +630,35 @@ void
 MainWindow::GetTitle()
 {
 	BString command("python %APP%/youtube-dl --get-title %URL%");
+	command.ReplaceAll("%APP%", fAppDir->String());
+	command.ReplaceAll("%URL%", fURL->String());
+	command.Append(" 2>&1 | tail -n 1");  // also get output from error out
+
+printf("Cliptitle:\n");
+
+	char title[1000];
+	FILE* pget_title;
+
+	pget_title = popen(command.String(),"r");
+	fread(title, 1, sizeof(title), pget_title);
+	fclose(pget_title);
+
+	/* strip trailing newline */
+	for (int i = 0; (unsigned) i < strlen(title); i++) {
+		if (title[i] == '\n' || title[i] == '\r' )
+			title[i] = '\0';
+	}
+	fClipTitle = title;			// saving original title
+	TruncateTitle();
+
+	return;
+}
+
+
+void
+MainWindow::GetFilename()
+{
+	BString command("python %APP%/youtube-dl --restrict-filenames --get-filename %URL%");
 	command.ReplaceAll("%APP%", fAppDir->String());
 	command.ReplaceAll("%URL%", fURL->String());
 	command.Append(" 2>&1 | tail -n 1");  // also get output from error out
@@ -647,20 +675,8 @@ MainWindow::GetTitle()
 		if (title[i] == '\n' || title[i] == '\r' )
 			title[i] = '\0';
 	}
-	fClipTitle = title;			// saving original title
+	fFilename = new BString(title, strlen(title));
 
-	TruncateTitle();
-
-	/* strip unwanted characters */
-	BString stripTitle = title;
-	stripTitle.ReplaceAll("\"", "\\\"");
-	stripTitle.ReplaceAll("/", "_");
-	stripTitle.ReplaceAll("\?", "");
-	stripTitle.ReplaceAll(":", " -");
-	stripTitle.ReplaceAll("||", "_");
-	stripTitle.ReplaceAll("|", "_");
-	fTitle = new BString(stripTitle, strlen(stripTitle));
-	
 	return;
 }
 
@@ -684,31 +700,32 @@ MainWindow::GetClip()
 		return true;
 
 	GetTitle();
+	GetFilename();
 
-	if (fTitle->FindFirst("ERROR: ") != B_ERROR) {
+	if (fFilename->FindFirst("ERROR: ") != B_ERROR) {
 		SetStatus("Not a valid URL");
 		printf("GetClip: Not a valid URL");
 		return false;
 	}
-	printf("GetClip: %s\n", fTitle->String());
+	printf("GetClip: %s\n", fFilename->String());
 
 	BString* command = new BString(
 	"hey application/x-vnd.UberTuber down ; "
 	"mkdir -p %DIR% ; "
 	"cd %DIR% ; "
-	"python %APP%/youtube-dl --max-quality=35 --continue -o '%(title)s' %URL% ; "
+	"python %APP%/youtube-dl --max-quality=22 --continue --restrict-filenames %URL% ; "
 	"while [ -n \"$(%TEST%)\" ] ; do " // wait for script to finish/aborted
 	"sleep 2 ; "
 	"done ; "
-	"addattr -t string META:url %URL% \"%TITLE%\" ; "
-	"if [ -e \"%TITLE%\" ] ; then "
+	"addattr -t string META:url %URL% \"%FILE%\" ; "
+	"if [ -e \"%FILE%\" ] ; then "
 	"hey application/x-vnd.UberTuber gfin ; "
 	"else hey application/x-vnd.UberTuber erro ; "
 	"fi ; "
 	"exit");
 
 	BString threadname("/bin/python %APP%/youtube-dl "
-		"--max-quality=35 --continue -o '%(title)s'");
+		"--max-quality=35 --continue --restrict-filenames %URL%");
 	threadname.ReplaceAll("%APP%", fAppDir->String());
 	threadname.Truncate(63);
 	BString threadtest("ps | grep \"%THREAD%\"");
@@ -718,7 +735,7 @@ MainWindow::GetClip()
 	command->ReplaceAll("%DIR%", fTempDir->String());
 	command->ReplaceAll("%APP%", fAppDir->String());
 	command->ReplaceAll("%URL%", fURL->String());
-	command->ReplaceAll("%TITLE%", fTitle->String());
+	command->ReplaceAll("%FILE%", fFilename->String());
 
 	fGetThread = spawn_thread(_call_script, "Clip downloader",
 		B_LOW_PRIORITY, command);
@@ -749,13 +766,13 @@ MainWindow::PlayClip()
 	"hey application/x-vnd.UberTuber buff ; "
 	"cd %DIR% ; "
 	"sleep 4 ; "
-	"settype -t video/mpeg4 \"%TITLE%.part\" ; "	// Force MPEG4 for MediaPlayer
-	"settype -t video/mpeg4 \"%TITLE%\" ; "
+	"settype -t video/mpeg4 \"%FILE%.part\" ; "	// Force MPEG4 for MediaPlayer
+	"settype -t video/mpeg4 \"%FILE%\" ; "
 	"hey application/x-vnd.UberTuber play ; "
-	"if [ -e \"%TITLE%.part\" ] ; then "
-	"open \"%TITLE%.part\" ; "
-	"elif [ -e \"%TITLE%\" ] ; then "
-	"open \"%TITLE%\" ; "
+	"if [ -e \"%FILE%.part\" ] ; then "
+	"open \"%FILE%.part\" ; "
+	"elif [ -e \"%FILE%\" ] ; then "
+	"open \"%FILE%\" ; "
 	"else "
 	"hey application/x-vnd.UberTuber erro ; "
 	"exit 1 ; "
@@ -763,8 +780,8 @@ MainWindow::PlayClip()
 	"sleep 1 ; "
 	"waitfor -e \"w>%TITLETHREAD1%\" ; "
 	"waitfor -e \"w>%TITLETHREAD2%\" ; "
-	"mimeset -F \"%TITLE%.part\" ; "				// Reset mimetype
-	"mimeset -F \"%TITLE%\" ; "
+	"mimeset -F \"%FILE%.part\" ; "				// Reset mimetype
+	"mimeset -F \"%FILE%\" ; "
 	"hey application/x-vnd.UberTuber pfin ; "
 	"exit");
 
@@ -776,14 +793,12 @@ MainWindow::PlayClip()
 	if (fSavedFlag || fPlayedFlag || fGotClipFlag)
 		command->RemoveAll("sleep 2 ; ");
 
-	command->ReplaceAll("%TITLE%", fTitle->String());
-
-printf("\n\nfilename: %s\n\n", fTitle->String());
+	command->ReplaceAll("%FILE%", fFilename->String());
 
 	// Truncate MediaPlayer thread names
-	BString title = fTitle->String();
+	BString title = fFilename->String();
 	command->ReplaceAll("%TITLETHREAD1%", title.Truncate(45));
-	title = fTitle->String();
+	title = fFilename->String();
 	title.Append(".part");
 	command->ReplaceAll("%TITLETHREAD2%", title.Truncate(45));
 
@@ -804,14 +819,14 @@ MainWindow::SaveClip()
 {
 	BString* command = new BString(
 		"cd %DIR% ; "
-		"addattr -t string META:url %URL% \"%TITLE%\" ; "
-		"mv \"%TITLE%\" \"%DEST%\" ; "
+		"addattr -t string META:url %URL% \"%FILE%\" ; "
+		"mv \"%FILE%\" \"%DEST%\" ; "
 		"hey application/x-vnd.UberTuber sfin ; "
 		"exit");
 
 	command->ReplaceAll("%DIR%", fTempDir->String());
 	command->ReplaceAll("%DEST%", fSaveDir->String());
-	command->ReplaceAll("%TITLE%", fTitle->String());
+	command->ReplaceAll("%FILE%", fFilename->String());
 	command->ReplaceAll("%URL%", fURL->String());
 
 	fSaveThread = spawn_thread(_call_script, "Clip saver",
