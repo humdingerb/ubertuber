@@ -1,13 +1,8 @@
-gccver= $(shell setgcc | tail -c -2)
 NAME= UberTuber
 TYPE= APP
 SRCS= App.cpp MainWindow.cpp Settings.cpp
-RSRCS= UberTuber.rsrc
-ifeq ($(gccver),2)
-	LIBS= be tracker stdc++.r4
-else
-	LIBS= be tracker stdc++
-endif
+RDEF= UberTuber.rdef
+LIBS= /boot/system/lib/libroot.so /boot/system/lib/libbe.so /boot/system/lib/libtracker.so
 LIBPATHS=
 SYSTEM_INCLUDE_PATHS= /boot/develop/headers/be /boot/develop/headers/cpp /boot/develop/headers/posix /boot/home/config/include
 LOCAL_INCLUDE_PATHS=
@@ -25,7 +20,7 @@ DEFINES=
 WARNINGS =
 # Build with debugging symbols if set to TRUE
 SYMBOLS=
-COMPILER_FLAGS=
+COMPILER_FLAGS=w
 LINKER_FLAGS=
 
 ## include the makefile-engine
