@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"../html-dtd/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta name="robots" content="all" />
+	<title>Ubertuber</title>
+
+<style type="text/css">
+
+body {
+    font-size: 0.9em;
+	font-family: "DejaVu Sans",Arial,Helvetica,sans-serif;
+	line-height: 1.5;
+	margin: 40px;
+	min-width: 45em;
+	max-width: 70em;
+}
+hr {
+	border: dotted thin #e0e0e0;
+}
+h1 {
+	font-size: 1.3em;
+	border-bottom: dotted thin #e0e0e0;
+	margin-bottom: 45px;
+}
+h2 {
+	font-size: 1.2em;
+	border-bottom: dotted thin #e0e0e0;
+	margin-top: 40px;
+}
+h3 {
+	font-size: 1em;
+	border-bottom: none;
+	margin-bottom: 0px;
+}
+tt {
+    background-color: #e2e2e2;
+    font-size: 1.0em;
+    font-family: monospace;
+}
+
+.key {		/* Shortcut (separate with &#160; */
+	-webkit-border-radius: 3px;
+	-khtml-border-radius: 3px;	
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border-color: #c7c7c7;
+	border-style: solid;
+	border-width: 1px;
+	padding: 0px 2px 0px 2px;
+	background-color: #e8e8e8;
+    font-family: sans;
+   	font-variant: small-caps;
+  	font-size: 1em;
+}
+.menu {		/* Menu */
+    	font-size: 1.0em;
+    	font-family: serif;
+    	font-style: italic;
+	color: #24225e;
+}
+
+</style> 
+
+</head>
+<body>
+<div align = "center">
+<img width="64" height="64" src="./images/ubertuber_icon_64.png" alt="UberTuber icon" />
+<p><span style="font-size: 1.5em; font-weight:bold">UberTuber</span><br />
+for <a href="http://www.haiku-os.org">Haiku</a><br />
+<i>by Humdinger</i></p>
+<hr />
+<p id="index"><a href="#settings">Settings</a> &mdash; <a href="#tips+tricks">Tips and Tricks</a> &mdash; <a href="#download">Download</a> &mdash; <a href="#bug+feedback">Bugreports and Feedback</a> &mdash; <a href="#thanks">Thanks</a> &mdash; <a href="#history">History</a><p>
+</div>
+<hr />
+<p><br /></p>
+<p>UberTuber grabs clips from various sites and opens them in your media player while they're being downloaded. This is as close to	streaming as it gets until Haiku's MediaKit grows real streaming support.</p>
+<p>The actual work is done in the back-end, using the Python script <tt>youtube-dl</tt> which downloads the video file to your temporary folder. From there it is either played back while it gets downloaded or moved	to another location you determine in a file dialog.</p>
+<p>UberTuber monitors the system clipboard for URLs pointing to the supported websites and automatically inserts them into its URL text field. Now you just have to decide to either play or save the clip to	start the download.</p>
+<p>This depends on the underlying script, which may get updated from time to time. At this moment there is support for clips from:</p>
+<div align="center"><p><i>YouTube, Google video, MetaCafe, DailyMotion, Yahoo video,<br />
+Photobucket, DepositFiles, Vimeo.com, blip.tv, Facebook video<br />
+and Escapist magazine.</i></p></div>
+<p>It may also work on videos from other sites... Give it a try!</p>
+
+<h2>
+<a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
+<a id="settings" name="settings">Settings</a></h2>
+<p>There are only very few user settings:</p>
+<div align="center">
+<img src="./images/ubertuber.jpg" alt="UberTuber window" />
+</div>
+<ul>
+<li><p><b>Auto-play</b><br/>
+This starts playback automatically, if a valid URL is detected in the clipboard. Convenient if you run UberTuber in the background while surfing the web: just copy the link to a clip in the browser and a few seconds later your media player starts playing it back.</p></li>
+<li><p><b>Remove temporary files on quit</b><br />
+The temporary folder is emptied when you shutdown Haiku. If you watch lots of long clips, disk space may become a concern. Check this option to have all temporary files deleted as soon as you quit UberTuber.</p></li>
+<li><p><b>Update download script</b><br />
+Gets the latest <tt>youtube-dl</tt> script. Worth a try, if you're unable to play clips from some site.</p></li>
+</ul>
+
+<h2>
+<a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
+<a id="tips+tricks" name="tips+tricks">Tips & Tricks</a></h2>
+<ul>
+<li><p><b>UberTuber doesn't work; nothing gets downloaded or played.</b><br />
+UberTuber needs to be in the same folder as its youtube-dl script. You mustn't move it outside its installation directory. Use links to it instead.</p></li>
+<li><p><b>Copied URLs won't automatically show up in UberTuber.</b><br />
+The URL might fall through UberTuber's very simple test if it's from a supported site. I'm afraid you'll have to paste it into the URL field by hand...<br />
+Send me the URL and I add it to the auto-insert filter for supported sites in a future release.</p></li>
+<li><p><b>UberTuber won't play/download clips from site X.</b><br />
+Probably the website isn't supported by the <tt>youtube-dl</tt> script. Your only hope is that it has been added recently and update it with UberTuber's <span class="menu">Update download script</span> menu item.</p></li>
+<li><p><b>How can I play back embedded videos?</b><br />
+In WebPositive, right-click on the black box of the embedded video and <span class="menu">Open frame in new window</span>. Now copy the URL and leave the rest to Ubertuber's clipboard monitor.</p></li>
+</ul>
+
+<h2>
+<a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
+<a id="download" name="download">Download</a></h2>
+<p>UberTuber is directly available through HaikuDepot from the HaikuPorts repository.<br />
+You can also download the UberTuber package (ubertuber.hpkg) directly from <a href="http://sourceforge.net/projects/ubertuber/files/?source=navbar">Sourceforge</a> where you also find the <a href="http://sourceforge.net/p/ubertuber/code/ci/master/tree/">source code</a> including a Paladin project file and also a Makefile to easily build it yourself.</p>
+
+<h2>
+<a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
+<a id="bugs+feedback" name="bugs+feedback">Bugreports and Feedback</a></h2>
+<p>Please use sourceforge's <a href="http://sourceforge.net/projects/ubertuber/support?source=navbar">bugreport form</a> if you experience unusual difficulties or email your general feedback to <a href="mailto:humdinger@gmail.com">me</a>.</p>
+
+<h2>
+<a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
+<a id="thanks" name="thanks">Thanks</a></h2>
+<p>I have to thank Leszek Lesner for providing his MIT licensed code for <a href="http://www.zevenos.com/about/yavtd">YAVTD</a> which provided ideas and some lines of code for UberTuber.<br />
+Also thanks to Duggan from the haiku-3rdparty IRC channel for hints and help to find crashing set-backs.<br />
+And finally thanks to the people providing the <a href="http://rg3.github.com/youtube-dl">youtube-dl script.
+</p>
+
+<h2>
+<a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
+<a id="history" name="history">History</a></h2>
+<p><b>0.9.0</b> - <i>24-09-2011:</i></p>
+<ul>
+<li>Initial release.</li>
+</ul>
+<p><b>0.9.1</b> - <i>30-09-2011:</i></p>
+<ul>
+<li>Forcing a MIME type video/mpeg4 when playing some clip. That way playback of some MP4 clips from sites like vimeo works, where before the media player complained it didn't know the format.<br />
+After playback the system does a mimeset -F on the clip to set the correct MIME type or going back to the generic appliction/octet-stream.</li>
+</ul>
+<p><b>0.9.2</b> - <i>07-12-2011:</i></p>
+<ul>
+<li>The forcing of the MIME type to video/mpeg4 didn't always work. We now just set this MIME type with any file, not just octet-streams. We also buffer buffer 2 seconds longer for good measure.<br />
+Aborting/killing the download should now work a bit better. Depending on length of the path to the UberTuber's installation folder, it didn't work at all before...</li>
+</ul>
+<p><b>0.9.3</b> - <i>17-11-2012:</i></p>
+<ul>
+<li>Added "youtu.be, blip.tv, escapistmagazine.com" to the clipboard monitor.</li>
+<li>Fixed a bug that had "vimeo" URLs not auto-inserted from the clipboard.</li>
+<li>Add META:url attribute with the download source URL also to the temporary file in /tmp/ubertuber.</li>
+<li>Removed the need for youtube-dl.patch.</li>
+<li>Truncate clip title if too long, don't resize the window anymore.</li>
+<li>Fixed a small issue in the logic of the abort button.</li>
+<li>Check if Python is installed and offer to install it if it's not.</li>
+<li>Jump through another hoop to get thevideo title of newer versions of the youtube-dl script.</li>
+</ul>
+<p><b>0.9.4</b> - <i>24-11-2012:</i></p>
+<ul>
+<li>We now check at the start if Python is installed, instead when trying to download a clip.</li>
+<li>Added the status "Installing Python" and "Installation finished" as feedback.</li>
+<li>We should now correctly determine when MediaPlayer was closed.</li>
+</ul>
+<p><b>0.9.5</b> - <i>20-04-2013:</i></p>
+<ul>
+<li>Removed the need for git to update the youtube-dl script.</li>
+<li>Added "youtube/embed" and "youtube-nocookie.com" to clipboard monitor. Now you can open embedded videos in a new tab from WebPositive's context menu and copy the URL from that new tab.</li>
+<li>UberTuber is now hosted at http://sourceforge.net/p/ubertuber.</li>
+</ul>
+<p><b>0.9.6</b> - <i>14-10-2013:</i></p>
+<ul>
+<li>Removed the check for Python. Not needed anymore with Haiku's package management.</li>
+<li>Adapted paths to new PM file system layout.</li>
+<li>Better handling of filenames with special characters, e.g.  /?:|<br />
+Still not perfect, I guess, but better...</li>
+</ul>
+<p><b>0.9.7</b> - <i>20-10-2013:</i></p>
+<ul>
+<li>The special character business doesn't seem to always solvable. Therefore I just take the restricted ASCII filename from now on. Not as beautiful, but it seems to work much better. Also set --max-quality=22  of youtube-dl, which seems to get the highest quality mp4 instead of downloading a flv instead...</li>
+</ul>
+
+</body>
+</html>
