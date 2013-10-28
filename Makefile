@@ -4,7 +4,7 @@ SRCS= App.cpp MainWindow.cpp Settings.cpp
 RDEFS= UberTuber.rdef
 LIBS= /boot/system/lib/libroot.so /boot/system/lib/libbe.so /boot/system/lib/libtracker.so
 LIBPATHS=
-SYSTEM_INCLUDE_PATHS= /boot/system/develop/headers/be /boot/system/develop/headers/cpp /boot/system/develop/headers/posix /boot/home/config/include
+SYSTEM_INCLUDE_PATHS= $(BUILDHOME)/headers/be $(BUILDHOME)/headers/cpp $(BUILDHOME)/headers/posix /boot/home/config/include
 LOCAL_INCLUDE_PATHS=
 OPTIMIZE=FULL
 #	specify any preprocessor symbols to be defined.  The symbols will not
