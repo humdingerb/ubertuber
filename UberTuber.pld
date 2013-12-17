@@ -14,7 +14,6 @@ GROUP=etc
 EXPANDGROUP=yes
 SOURCEFILE=UberTuber.rdef
 SOURCEFILE=youtube-dl
-SOURCEFILE=ReadMe
 SYSTEMINCLUDE=/boot/develop/headers/be
 SYSTEMINCLUDE=/boot/develop/headers/cpp
 SYSTEMINCLUDE=/boot/develop/headers/posix

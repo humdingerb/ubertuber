@@ -98,21 +98,17 @@ and Escapist magazine.</i></p></div>
 This starts playback automatically, if a valid URL is detected in the clipboard. Convenient if you run UberTuber in the background while surfing the web: just copy the link to a clip in the browser and a few seconds later your media player starts playing it back.</p></li>
 <li><p><b>Remove temporary files on quit</b><br />
 The temporary folder is emptied when you shutdown Haiku. If you watch lots of long clips, disk space may become a concern. Check this option to have all temporary files deleted as soon as you quit UberTuber.</p></li>
-<li><p><b>Update download script</b><br />
-Gets the latest <tt>youtube-dl</tt> script. Worth a try, if you're unable to play clips from some site.</p></li>
 </ul>
 
 <h2>
 <a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
 <a id="tips+tricks" name="tips+tricks">Tips & Tricks</a></h2>
 <ul>
-<li><p><b>UberTuber doesn't work; nothing gets downloaded or played.</b><br />
-UberTuber needs to be in the same folder as its youtube-dl script. You mustn't move it outside its installation directory. Use links to it instead.</p></li>
 <li><p><b>Copied URLs won't automatically show up in UberTuber.</b><br />
 The URL might fall through UberTuber's very simple test if it's from a supported site. I'm afraid you'll have to paste it into the URL field by hand...<br />
 Send me the URL and I add it to the auto-insert filter for supported sites in a future release.</p></li>
 <li><p><b>UberTuber won't play/download clips from site X.</b><br />
-Probably the website isn't supported by the <tt>youtube-dl</tt> script. Your only hope is that it has been added recently and update it with UberTuber's <span class="menu">Update download script</span> menu item.</p></li>
+Probably the website isn't supported by the <tt>youtube-dl</tt> script. Your only hope is that it has been added recently. Check the youtube-dl package for updates.</p></li>
 <li><p><b>How can I play back embedded videos?</b><br />
 In WebPositive, right-click on the black box of the embedded video and <span class="menu">Open frame in new window</span>. Now copy the URL and leave the rest to Ubertuber's clipboard monitor.</p></li>
 </ul>
@@ -120,8 +116,7 @@ In WebPositive, right-click on the black box of the embedded video and <span cla
 <h2>
 <a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
 <a id="download" name="download">Download</a></h2>
-<p>UberTuber is directly available through HaikuDepot from the HaikuPorts repository.<br />
-You can also download the UberTuber package (ubertuber.hpkg) directly from <a href="http://sourceforge.net/projects/ubertuber/files/?source=navbar">Sourceforge</a> where you also find the <a href="http://sourceforge.net/p/ubertuber/code/ci/master/tree/">source code</a> including a Paladin project file and also a Makefile to easily build it yourself.</p>
+<p>UberTuber is directly available through HaikuDepot from the HaikuPorts repository.</p>
 
 <h2>
 <a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
@@ -186,6 +181,12 @@ Still not perfect, I guess, but better...</li>
 <p><b>0.9.7</b> - <i>20-10-2013:</i></p>
 <ul>
 <li>The special character business doesn't seem to always solvable. Therefore I just take the restricted ASCII filename from now on. Not as beautiful, but it seems to work much better. Also set --max-quality=22  of youtube-dl, which seems to get the highest quality mp4 instead of downloading a flv instead...</li>
+</ul>
+<p><b>0.9.8</b> - <i>-2013:</i></p>
+<ul>
+<li>Removed youtube-dl from UberTuber package and declare that as dependancy.</li>
+<li>Removed menu to update youtube-dl. It always was a security hole and now that the package managment is enforcing read-only locations for packages, it would take too many hoops to jump through to maintain this security nightmare...</li>
+<li>Simplify code, making use of ps' new -o option. Simplify tests for running thread name.</li>
 </ul>
 
 </body>

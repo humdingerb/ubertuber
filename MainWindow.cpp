@@ -142,9 +142,6 @@ MainWindow::_BuildMenu()
 	menu->AddItem(item = fClearMenu = new BMenuItem(
 		"Remove temporary files on quit", new BMessage(msgCLEAR)));
 	item->SetMarked(fSettings.StateClear());
-	menu->AddSeparatorItem();
-	menu->AddItem(fUpdateMenu = new BMenuItem("Update download script",
-		new BMessage(msgUPDATE)));
 	fMenuBar->AddItem(menu);
 
 //	The future History menu:
@@ -336,13 +333,6 @@ MainWindow::MessageReceived(BMessage* msg)
 			fSettings.SetLastDir(path);
 			break;
 		}
-		case msgUPDATE:
-		{
-			UpdateScript();
-			SetStatus("");
-			fTitleView->SetText("");
-			break;
-		}
 		case msgURL:
 		{
 			if (!fGetFlag) {
@@ -383,7 +373,6 @@ MainWindow::MessageReceived(BMessage* msg)
 			}
 			fURLBox->SetEnabled(true);
 			ResetFlags();
-			fUpdateMenu->SetEnabled(true);
 
 			break;
 		}
@@ -393,7 +382,6 @@ MainWindow::MessageReceived(BMessage* msg)
 				SetStatus("Download finished");
 			fAbortButton->SetEnabled(false);
 			fAbortMenu->SetEnabled(false);
-			fUpdateMenu->SetEnabled(true);
 			fGetFlag = false;
 			fGotClipFlag = true;
 			if (fSaveIt)
@@ -420,7 +408,6 @@ MainWindow::MessageReceived(BMessage* msg)
 			fPlayingFlag = false;
 			fPlayButton->SetEnabled(true);
 			fPlayMenu->SetEnabled(true);
-			fUpdateMenu->SetEnabled(true);
 			
 			break;
 		}
@@ -432,26 +419,10 @@ MainWindow::MessageReceived(BMessage* msg)
 			fSavedFlag = true;
 			break;
 		}
-		case statFINISH_UPDATE:
-		{
-			SetStatus("Update finished");
-			fUpdateMenu->SetEnabled(true);
-			break;
-		}
 		case statPLAYING:
 		{
 			fPlayingFlag = true;
 			SetStatus("Playing...");
-			break;
-		}
-		case statUPDATING:
-		{
-			SetStatus("Updating script...");
-			break;
-		}
-		case statINSTRDY:
-		{
-			SetStatus("Installation finished");
 			break;
 		}
 		default:
@@ -513,13 +484,7 @@ MainWindow::QuitRequested()
 void
 MainWindow::KillThread()
 {
-	BString threadname("/bin/python %APP%/youtube-dl "
-		"--max-quality=22 --continue --restrict-filenames %URL%");
-	threadname.ReplaceAll("%APP%", fAppDir->String());
-	threadname.Truncate(63);
-
-	BString command("ps | grep \"%THREAD%\" | awk '{ print $3; }' ; exit");
-	command.ReplaceAll("%THREAD%", threadname.String());
+	BString command("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
 
 	char output[6];
 	FILE* pget_threadID;
@@ -527,16 +492,6 @@ MainWindow::KillThread()
 	pget_threadID = popen(command.String(),"r");
 	fread(output, 1, sizeof(output), pget_threadID);
 	fclose(pget_threadID);
-
-	if (output[0] == '-') {	// If path to UberTuber is too short, column 3
-							// of ps output is "--max". Get column 4 instead.
-		BString command("ps | grep \"%THREAD%\" | awk '{ print $4; }' ; exit");
-		command.ReplaceAll("%THREAD%", threadname.String());
-	
-		pget_threadID = popen(command.String(),"r");
-		fread(output, 1, sizeof(output), pget_threadID);
-		fclose(pget_threadID);
-	}
 
 	/* strip trailing newline */
 	for (int i = 0; (unsigned) i < strlen(output); i++) {
@@ -600,11 +555,6 @@ MainWindow::_GetDirectories()
 	fTempDir = new BString(path.Path());
 	fTempDir->Append("/ubertuber");
 
-	app_info info;
-	be_app->GetAppInfo(&info);
-	path = BPath(&info.ref);
-	path.GetParent(&path);
-	fAppDir = new BString(path.Path());
 	return;
 }
 
@@ -629,12 +579,10 @@ MainWindow::GetClipboard()
 void
 MainWindow::GetTitle()
 {
-	BString command("python %APP%/youtube-dl --get-title %URL%");
-	command.ReplaceAll("%APP%", fAppDir->String());
+	BString command("youtube-dl --get-title %URL% 2>&1 | tail -n 1"); // also get output from error out
 	command.ReplaceAll("%URL%", fURL->String());
-	command.Append(" 2>&1 | tail -n 1");  // also get output from error out
 
-printf("Cliptitle:\n");
+	printf("Cliptitle:\n");
 
 	char title[1000];
 	FILE* pget_title;
@@ -658,10 +606,8 @@ printf("Cliptitle:\n");
 void
 MainWindow::GetFilename()
 {
-	BString command("python %APP%/youtube-dl --restrict-filenames --get-filename %URL%");
-	command.ReplaceAll("%APP%", fAppDir->String());
+	BString command("youtube-dl --restrict-filenames --get-filename %URL% 2>&1 | tail -n 1");
 	command.ReplaceAll("%URL%", fURL->String());
-	command.Append(" 2>&1 | tail -n 1");  // also get output from error out
 
 	char title[1000];
 	FILE* pget_title;
@@ -713,7 +659,7 @@ MainWindow::GetClip()
 	"hey application/x-vnd.UberTuber down ; "
 	"mkdir -p %DIR% ; "
 	"cd %DIR% ; "
-	"python %APP%/youtube-dl --max-quality=22 --continue --restrict-filenames %URL% ; "
+	"youtube-dl --max-quality=22 --continue --restrict-filenames %URL% ; "
 	"while [ -n \"$(%TEST%)\" ] ; do " // wait for script to finish/aborted
 	"sleep 2 ; "
 	"done ; "
@@ -724,16 +670,10 @@ MainWindow::GetClip()
 	"fi ; "
 	"exit");
 
-	BString threadname("/bin/python %APP%/youtube-dl "
-		"--max-quality=35 --continue --restrict-filenames %URL%");
-	threadname.ReplaceAll("%APP%", fAppDir->String());
-	threadname.Truncate(63);
-	BString threadtest("ps | grep \"%THREAD%\"");
-	threadtest.ReplaceAll("%THREAD%", threadname.String());
+	BString threadtest("ps | grep python | grep youtube-dl");
 
 	command->ReplaceAll("%TEST%", threadtest.String());
 	command->ReplaceAll("%DIR%", fTempDir->String());
-	command->ReplaceAll("%APP%", fAppDir->String());
 	command->ReplaceAll("%URL%", fURL->String());
 	command->ReplaceAll("%FILE%", fFilename->String());
 
@@ -750,7 +690,6 @@ MainWindow::GetClip()
 	fAbortMenu->SetEnabled(true);
 	fAbortButton->SetEnabled(true);
 
-	fUpdateMenu->SetEnabled(false);
 	fURLBox->SetEnabled(false);
 	return true;
 }
@@ -840,26 +779,3 @@ MainWindow::SaveClip()
 	return;
 }
 
-
-void
-MainWindow::UpdateScript()
-{
-	printf("Updating download script...\n");
-
-	BString* command = new BString(
-		"hey application/x-vnd.UberTuber upda ; "
-		"python %APP%/youtube-dl --update; "
-		"hey application/x-vnd.UberTuber ufin ; "
-		"exit");
-
-	command->ReplaceAll("%APP%", fAppDir->String());
-
-	fUpdateThread = spawn_thread(_call_script, "Skript updater",
-		B_LOW_PRIORITY, command);
-
-	if (fUpdateThread < B_OK)
-		return;
-
-	resume_thread(fUpdateThread);
-	return;
-}

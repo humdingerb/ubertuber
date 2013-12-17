@@ -27,14 +27,12 @@
 enum {
 	statBUFFER			= 'buff',
 	statDOWNLOAD		= 'down',
-	statUPDATING		= 'upda',
 	statFINISH_GET		= 'gfin',
 	statFINISH_PLAY		= 'pfin',
 	statFINISH_SAVE		= 'sfin',
 	statFINISH_UPDATE	= 'ufin',
 	statERROR			= 'erro',
 	statPLAYING			= 'play',
-	statINSTRDY			= 'irdy',
 
 	msgABORT	= 'abor',
 	msgAUTO		= 'auto',
@@ -43,7 +41,6 @@ enum {
 	msgHISTORY	= 'hist',
 	msgPLAY		= 'ypla',
 	msgSAVE		= 'esav',
-	msgUPDATE	= 'updt',
 	msgURL		= 'urly'
 };
 
@@ -72,7 +69,6 @@ private:
 
 		void			PlayClip();
 		void			SaveClip();
-		void			UpdateScript();
 
 private:
 		BButton*		fAbortButton;
@@ -89,9 +85,7 @@ private:
 		BMenuItem*		fHistoryMenu;
 		BMenuItem*		fPlayMenu;
 		BMenuItem*		fSaveMenu;
-		BMenuItem*		fUpdateMenu;
 
-		BString*		fAppDir;
 		BString			fClipTitle;
 		BString*		fFilename;
 		BString*		fSaveDir;
@@ -114,7 +108,6 @@ private:
 		thread_id		fGetThread;
 		thread_id		fPlayThread;
 		thread_id		fSaveThread;
-		thread_id		fUpdateThread;
 };
 
 #endif /* MAINWINDOW_H */

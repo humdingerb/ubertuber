@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012. All rights reserved.
+ * Copyright 2011-2013. All rights reserved.
  * Distributed under the terms of the MIT license.
  *
  * Author:
@@ -36,10 +36,7 @@ App::MessageReceived(BMessage* msg)
 		case statFINISH_GET:
 		case statFINISH_PLAY:
 		case statFINISH_SAVE:
-		case statFINISH_UPDATE:
 		case statPLAYING:
-		case statUPDATING:
-		case statINSTRDY:
 		{
 			msg->PrintToStream();
 			fMainWindow->PostMessage(DetachCurrentMessage());
@@ -57,7 +54,7 @@ App::MessageReceived(BMessage* msg)
 void
 App::AboutRequested()
 {
-	BAlert *alert = new BAlert("about", "UberTuber   v0.9.7\n"
+	BAlert *alert = new BAlert("about", "UberTuber   v0.9.8\n"
 		"\twritten by Humdinger\n"
 		"\tbased on ideas of Leszek's YAVTD\n"
 		"\tCopyright 2011-2013\n\n"
