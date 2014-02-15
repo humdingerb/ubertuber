@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2013. All rights reserved.
+ * Copyright 2011-2014. All rights reserved.
  * Distributed under the terms of the MIT license.
  *
  * Author:
@@ -13,6 +13,7 @@
 #define MAINWINDOW_H
 
 #include "Settings.h"
+#include "WorkerThread.h"
 
 #include <Button.h>
 #include <FilePanel.h>
@@ -55,10 +56,8 @@ public:
 private:
 		void			_BuildMenu();
 		void			_BuildLayout();
-		void			_GetDirectories();
 
 		bool			GetClip();
-		void			GetFilename();
 		void			GetTitle();
 		BString			GetClipboard();
 		void			KillThread();
@@ -105,9 +104,8 @@ private:
 		bool			fSaveIt;
 
 		Settings		fSettings;
-		thread_id		fGetThread;
-		thread_id		fPlayThread;
-		thread_id		fSaveThread;
+		
+		WorkerThread*	fWorkerThread;
 };
 
 #endif /* MAINWINDOW_H */

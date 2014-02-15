@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2013. All rights reserved.
+ * Copyright 2011-2014. All rights reserved.
  * Distributed under the terms of the MIT license.
  *
  * Author:
@@ -63,9 +63,9 @@ MainWindow::MainWindow()
 	fPlayedFlag(false),
 	fPlayingFlag(false),
 	fSavedFlag(false),
-	fSaveIt(false)
+	fSaveIt(false),
+	fWorkerThread(new WorkerThread(this))
 {
-	_GetDirectories();
 	_BuildMenu();
 	_BuildLayout();
 
@@ -260,7 +260,7 @@ MainWindow::MessageReceived(BMessage* msg)
 			fClearMenu->SetMarked(fSettings.StateClear());
 			break;
 		}
-			case msgCLEARHIST:
+		case msgCLEARHIST:
 		{
 			printf("Clear history!\n");
 			break;
@@ -274,23 +274,21 @@ MainWindow::MessageReceived(BMessage* msg)
 		}
 		case msgABORT:
 		{
-			if (fGetThread) {
-				KillThread();
+			KillThread();
 
-				SetStatus("Aborted");
-				printf("Download aborted\n");
+			SetStatus("Aborted");
+			printf("Download aborted\n");
 
-				fAbortMenu->SetEnabled(false);
-				fAbortButton->SetEnabled(false);
+			fAbortMenu->SetEnabled(false);
+			fAbortButton->SetEnabled(false);
 
-				fPlayButton->SetEnabled(true);
-				fSaveButton->SetEnabled(true);
-				fPlayMenu->SetEnabled(true);
-				fSaveMenu->SetEnabled(true);
-				fURLBox->SetEnabled(true);
-				ResetFlags();
-				fAbortedFlag = true;
-			}
+			fPlayButton->SetEnabled(true);
+			fSaveButton->SetEnabled(true);
+			fPlayMenu->SetEnabled(true);
+			fSaveMenu->SetEnabled(true);
+			fURLBox->SetEnabled(true);
+			ResetFlags();
+			fAbortedFlag = true;
 			break;
 		}
 		case msgPLAY:
@@ -350,6 +348,12 @@ MainWindow::MessageReceived(BMessage* msg)
 			}
 			break;
 		}
+		case msgTITLE:
+		{
+			if (msg->FindString("title", &fClipTitle) == B_OK)
+				TruncateTitle();
+			break;
+		}
 
 		// React to messages from 'hey', forwarded from App
 		case statBUFFER:
@@ -373,7 +377,6 @@ MainWindow::MessageReceived(BMessage* msg)
 			}
 			fURLBox->SetEnabled(true);
 			ResetFlags();
-
 			break;
 		}
 		case statFINISH_GET:
@@ -407,8 +410,7 @@ MainWindow::MessageReceived(BMessage* msg)
 
 			fPlayingFlag = false;
 			fPlayButton->SetEnabled(true);
-			fPlayMenu->SetEnabled(true);
-			
+			fPlayMenu->SetEnabled(true);		
 			break;
 		}
 		case statFINISH_SAVE:
@@ -441,6 +443,18 @@ MainWindow::FrameResized(float width, float height)
 }
 
 
+void
+MainWindow::TruncateTitle()
+{
+	float widthURL(fURLBox->Bounds().Width());
+	BString* title = new BString(fClipTitle);
+	fTitleView->TruncateString(title, B_TRUNCATE_END, widthURL - 120.0);
+	fTitleView->SetText(title->String());
+	
+	return;
+}
+
+
 bool
 MainWindow::QuitRequested()
 {
@@ -467,15 +481,13 @@ MainWindow::QuitRequested()
 		}
 	}
 	if (fSettings.StateClear()) {
-		BString	command("rm %TMP%/*");
 
-		command.ReplaceAll("%TMP%", fTempDir->String());
-
+		system("rm /tmp/ubertuber/*");
 		printf("Deleting temporary files\n");
-		system(command.String());
+
 	}
 	fSettings.SetWindowPosition(ConvertToScreen(Bounds()));
-
+	fWorkerThread->PostMessage(B_QUIT_REQUESTED);
 	be_app->PostMessage(B_QUIT_REQUESTED);
 	return true;
 }
@@ -547,18 +559,6 @@ MainWindow::SetStatus(char* text)
 }
 
 
-void
-MainWindow::_GetDirectories()
-{
-	BPath path;
-	find_directory(B_SYSTEM_TEMP_DIRECTORY, &path);
-	fTempDir = new BString(path.Path());
-	fTempDir->Append("/ubertuber");
-
-	return;
-}
-
-
 BString
 MainWindow::GetClipboard()
 {
@@ -579,62 +579,10 @@ MainWindow::GetClipboard()
 void
 MainWindow::GetTitle()
 {
-	BString command("youtube-dl --get-title %URL% 2>&1 | tail -n 1"); // also get output from error out
-	command.ReplaceAll("%URL%", fURL->String());
+	BMessage msg(msgGETTITLE);
+	msg.AddString("url", fURL->String());
+	fWorkerThread->Looper()->PostMessage(&msg, fWorkerThread);
 
-	printf("Cliptitle:\n");
-
-	char title[1000];
-	FILE* pget_title;
-
-	pget_title = popen(command.String(),"r");
-	fread(title, 1, sizeof(title), pget_title);
-	fclose(pget_title);
-
-	/* strip trailing newline */
-	for (int i = 0; (unsigned) i < strlen(title); i++) {
-		if (title[i] == '\n' || title[i] == '\r' )
-			title[i] = '\0';
-	}
-	fClipTitle = title;			// saving original title
-	TruncateTitle();
-
-	return;
-}
-
-
-void
-MainWindow::GetFilename()
-{
-	BString command("youtube-dl --restrict-filenames --get-filename %URL% 2>&1 | tail -n 1");
-	command.ReplaceAll("%URL%", fURL->String());
-
-	char title[1000];
-	FILE* pget_title;
-
-	pget_title = popen(command.String(),"r");
-	fread(title, 1, sizeof(title), pget_title);
-	fclose(pget_title);
-
-	/* strip trailing newline */
-	for (int i = 0; (unsigned) i < strlen(title); i++) {
-		if (title[i] == '\n' || title[i] == '\r' )
-			title[i] = '\0';
-	}
-	fFilename = new BString(title, strlen(title));
-
-	return;
-}
-
-
-void
-MainWindow::TruncateTitle()
-{
-	float widthURL(fURLBox->Bounds().Width());
-	BString* title = new BString(fClipTitle);
-	fTitleView->TruncateString(title, B_TRUNCATE_END, widthURL - 120.0);
-	fTitleView->SetText(title->String());
-	
 	return;
 }
 
@@ -646,44 +594,10 @@ MainWindow::GetClip()
 		return true;
 
 	GetTitle();
-	GetFilename();
-
-	if (fFilename->FindFirst("ERROR: ") != B_ERROR) {
-		SetStatus("Not a valid URL");
-		printf("GetClip: Not a valid URL");
-		return false;
-	}
-	printf("GetClip: %s\n", fFilename->String());
-
-	BString* command = new BString(
-	"hey application/x-vnd.UberTuber down ; "
-	"mkdir -p %DIR% ; "
-	"cd %DIR% ; "
-	"youtube-dl --max-quality=22 --continue --restrict-filenames %URL% ; "
-	"while [ -n \"$(%TEST%)\" ] ; do " // wait for script to finish/aborted
-	"sleep 2 ; "
-	"done ; "
-	"addattr -t string META:url %URL% \"%FILE%\" ; "
-	"if [ -e \"%FILE%\" ] ; then "
-	"hey application/x-vnd.UberTuber gfin ; "
-	"else hey application/x-vnd.UberTuber erro ; "
-	"fi ; "
-	"exit");
-
-	BString threadtest("ps | grep python | grep youtube-dl");
-
-	command->ReplaceAll("%TEST%", threadtest.String());
-	command->ReplaceAll("%DIR%", fTempDir->String());
-	command->ReplaceAll("%URL%", fURL->String());
-	command->ReplaceAll("%FILE%", fFilename->String());
-
-	fGetThread = spawn_thread(_call_script, "Clip downloader",
-		B_LOW_PRIORITY, command);
-
-	if (fGetThread < B_OK)
-		return false;
-
-	resume_thread(fGetThread);
+	
+	BMessage msg(msgGETCLIP);
+	msg.AddString("url", fURL->String());
+	fWorkerThread->Looper()->PostMessage(&msg, fWorkerThread);
 
 	fGetFlag = true;
 	fAbortButton->SetEnabled(true);
@@ -698,56 +612,53 @@ MainWindow::GetClip()
 void
 MainWindow::PlayClip()
 {
-	printf("->PlayClip\n");
-
 	BString* command = new BString(
-	"sleep 2 ; "
 	"hey application/x-vnd.UberTuber buff ; "
 	"cd %DIR% ; "
-	"sleep 4 ; "
-	"settype -t video/mpeg4 \"%FILE%.part\" ; "	// Force MPEG4 for MediaPlayer
-	"settype -t video/mpeg4 \"%FILE%\" ; "
+	"FILE=$(youtube-dl --restrict-filenames --get-filename %URL% 2>&1 | tail -n 1) ; "
+	"until [ -e \"$FILE.part\" ] || [ -e \"$FILE\" ] ; do " // wait until file exists
+	"sleep 1 ; "
+	"done ; "
+	"settype -t video/mpeg4 \"$FILE.part\" ; "	// Force MPEG4 for MediaPlayer
+	"settype -t video/mpeg4 \"$FILE\" ; "
 	"hey application/x-vnd.UberTuber play ; "
-	"if [ -e \"%FILE%.part\" ] ; then "
-	"open \"%FILE%.part\" ; "
-	"elif [ -e \"%FILE%\" ] ; then "
-	"open \"%FILE%\" ; "
+	"if [ -e \"$FILE.part\" ] ; then "
+	"open \"$FILE.part\" ; "
+	"elif [ -e \"$FILE\" ] ; then "
+	"open \"$FILE\" ; "
 	"else "
 	"hey application/x-vnd.UberTuber erro ; "
 	"exit 1 ; "
 	"fi ; "
 	"sleep 1 ; "
-	"waitfor -e \"w>%TITLETHREAD1%\" ; "
-	"waitfor -e \"w>%TITLETHREAD2%\" ; "
-	"mimeset -F \"%FILE%.part\" ; "				// Reset mimetype
-	"mimeset -F \"%FILE%\" ; "
+	"TITLETHREAD1=$(echo $FILE | cut -c 1-45) ; "
+	"TITLETHREAD2=$(echo $FILE.part | cut -c 1-45) ; "
+	"waitfor -e \"w>$TITLETHREAD1\" ; "
+	"waitfor -e \"w>$TITLETHREAD2\" ; "
+	"if [ -e \"$FILE.part\" ] ; then "	
+	"mimeset -F \"$FILE.part\" ; "				// Reset mimetype
+	"else "
+	"mimeset -F \"$FILE\" ; "
+	"fi ; "
 	"hey application/x-vnd.UberTuber pfin ; "
 	"exit");
 
+	command->ReplaceAll("%URL%", fURL->String());
+	
 	if (fSavedFlag)
 		command->ReplaceAll("%DIR%", fSaveDir->String());
 	else
-		command->ReplaceAll("%DIR%", fTempDir->String());
+		command->ReplaceAll("%DIR%", "/tmp/ubertuber");
 
 	if (fSavedFlag || fPlayedFlag || fGotClipFlag)
 		command->RemoveAll("sleep 2 ; ");
 
-	command->ReplaceAll("%FILE%", fFilename->String());
-
-	// Truncate MediaPlayer thread names
-	BString title = fFilename->String();
-	command->ReplaceAll("%TITLETHREAD1%", title.Truncate(45));
-	title = fFilename->String();
-	title.Append(".part");
-	command->ReplaceAll("%TITLETHREAD2%", title.Truncate(45));
-
-	fPlayThread = spawn_thread(_call_script, "Clip player",
+	thread_id playthread = spawn_thread(_call_script, "Clip player",
 		B_LOW_PRIORITY, command);
 
-	if (fPlayThread < B_OK)
+	if (playthread < B_OK)
 		return;
-
-	resume_thread(fPlayThread);
+	resume_thread(playthread);
 
 	return;
 }
@@ -757,24 +668,23 @@ void
 MainWindow::SaveClip()
 {
 	BString* command = new BString(
-		"cd %DIR% ; "
-		"addattr -t string META:url %URL% \"%FILE%\" ; "
-		"mv \"%FILE%\" \"%DEST%\" ; "
+		"cd /tmp/ubertuber ; "
+		"FILE=$(youtube-dl --restrict-filenames --get-filename %URL% 2>&1 | tail -n 1) ; "
+		"addattr -t string META:url %URL% \"$FILE\" ; "
+		"mv \"$FILE\" \"%DEST%\" ; "
 		"hey application/x-vnd.UberTuber sfin ; "
 		"exit");
 
-	command->ReplaceAll("%DIR%", fTempDir->String());
 	command->ReplaceAll("%DEST%", fSaveDir->String());
-	command->ReplaceAll("%FILE%", fFilename->String());
 	command->ReplaceAll("%URL%", fURL->String());
 
-	fSaveThread = spawn_thread(_call_script, "Clip saver",
+	thread_id savethread = spawn_thread(_call_script, "Clip saver",
 		B_LOW_PRIORITY, command);
 
-	if (fSaveThread < B_OK)
+	if (savethread < B_OK)
 		return;
 
-	resume_thread(fSaveThread);
+	resume_thread(savethread);
 	
 	return;
 }
