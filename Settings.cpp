@@ -23,6 +23,8 @@
 
 
 Settings::Settings()
+	:
+	fChangedMonitoredList(false)
 {
 	BPath path;
 	BMessage msg;
@@ -52,7 +54,16 @@ Settings::Settings()
 			originalLastDir = fLastDir;
 			originalPosition = fPosition;
 		}
+		ReadMonitoredSitesList();
 	}
+}
+
+
+void
+Settings::ReadMonitoredSitesList()
+{
+	fValidAddressList.MakeEmpty();
+	BPath path;
 	if (find_directory(B_USER_SETTINGS_DIRECTORY, &path) == B_OK) {
 		path.Append(kMonitorFile);
 		
@@ -149,6 +160,11 @@ Settings::~Settings()
 bool
 Settings::ValidURL(BString url)
 {
+	if (fChangedMonitoredList) {
+		ReadMonitoredSitesList();
+		fChangedMonitoredList = false;
+	}
+		
 	bool valid = false;
 
 	for (int32 i = 0; i < fValidAddressList.CountItems(); i++) {
@@ -159,6 +175,13 @@ Settings::ValidURL(BString url)
 		}
 	}
 	return valid;
+}
+
+
+void
+Settings::SetChangedMonitoredList()
+{
+	fChangedMonitoredList = true;
 }
 
 

@@ -21,6 +21,7 @@
 #include <FindDirectory.h>
 #include <InterfaceDefs.h>
 #include <LayoutBuilder.h>
+#include <NodeMonitor.h>
 #include <Path.h>
 #include <Roster.h>
 #include <Screen.h>
@@ -91,6 +92,7 @@ MainWindow::MainWindow()
 		fSavePanel->Window()->Unlock();
 	}
 
+	WatchMonitoredSitesList();
 	be_clipboard->StartWatching(this);
 	PostMessage(B_CLIPBOARD_CHANGED);
 
@@ -206,11 +208,42 @@ MainWindow::_BuildLayout()
 }
 
 
+status_t
+MainWindow::WatchMonitoredSitesList()
+{
+	BPath path;
+	if (find_directory(B_USER_SETTINGS_DIRECTORY, &path) != B_OK) 
+		return false;
+		
+	path.Append(kMonitorFile);
+	BEntry* entry = new BEntry(path.Path());
+
+	node_ref nref;
+	entry->GetNodeRef(&nref);
+	return (watch_node(&nref, B_WATCH_STAT, this));
+}
+
+
 void
 MainWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what)
 	{
+		case B_NODE_MONITOR:
+		{
+			int32 opcode;
+			if (msg->FindInt32("opcode", &opcode) == B_OK) {
+				switch (opcode) {
+					case B_STAT_CHANGED:
+					{
+						printf("Monitored sites list has changed.\n");
+						fSettings.SetChangedMonitoredList();
+						break;
+					}
+				}
+			}
+			break;
+		}
 		case B_CLIPBOARD_CHANGED:
 		{
 			BString clipboardString(GetClipboard());

@@ -29,6 +29,7 @@ public:
 		bool		StateHistory() const { return fStateHistory; }
 		BRect		WindowPosition() const { return fPosition; }
 
+		void		SetChangedMonitoredList();
 		void		SetDefaults();
 		void		SetLastDir(BPath);
 		void		SetStateAuto(bool);
@@ -37,6 +38,7 @@ public:
 		void		SetWindowPosition(BRect);
 
 		bool		ValidURL(BString);
+		void		ReadMonitoredSitesList();
 
 private:
 		BPath		fLastDir;
@@ -52,6 +54,7 @@ private:
 		bool		originalStateHistory;
 		
 		BObjectList<BString>	fValidAddressList;
+		bool		fChangedMonitoredList;
 };
 
 #endif	/* SETTINGS_H */

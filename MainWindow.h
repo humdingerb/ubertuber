@@ -58,6 +58,7 @@ private:
 		void			_BuildMenu();
 		void			_BuildLayout();
 
+		status_t		WatchMonitoredSitesList();
 		bool			GetClip();
 		void			GetTitle();
 		BString			GetClipboard();
