@@ -54,8 +54,6 @@ WorkerThread::_GetTitle(BString url)
 	BString command("youtube-dl --get-title %URL% 2>&1 | tail -n 1"); // also get output from error out
 	command.ReplaceAll("%URL%", url.String());
 
-	printf("Cliptitle:\n");
-
 	char title[1000];
 	FILE* pget_title;
 
@@ -79,7 +77,7 @@ WorkerThread::_GetClip(BString url)
 	"mkdir -p /tmp/ubertuber ; "
 	"cd /tmp/ubertuber ; "
 	"hey application/x-vnd.UberTuber down ; "
-	"youtube-dl --max-quality=22 --continue --restrict-filenames %URL% ; "
+	"youtube-dl --max-quality=22 --continue --restrict-filenames --no-cache-dir %URL% ; "
 	"while [ -n \"$(%TEST%)\" ] ; do " // wait for script to finish/aborted
 	"sleep 2 ; "
 	"done ; "
@@ -97,12 +95,5 @@ WorkerThread::_GetClip(BString url)
 	command->ReplaceAll("%URL%", url.String());
 
 	system(command->String());
-//	thread_id getthread = spawn_thread(_call_script, "Clip downloader",
-//		B_LOW_PRIORITY, command);
-//
-//	if (getthread < B_OK)
-//		return false;
-//
-//	resume_thread(getthread);
 	return true;
 }

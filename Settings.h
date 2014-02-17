@@ -10,9 +10,13 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <ObjectList.h>
 #include <Path.h>
 #include <Rect.h>
+#include <String.h>
 
+static const char kSettingsFile[] = "UberTuber_settings";
+static const char kMonitorFile[] = "UberTuber_monitored_sites";
 
 class Settings {
 public:
@@ -32,6 +36,8 @@ public:
 		void		SetStateHistory(bool);
 		void		SetWindowPosition(BRect);
 
+		bool		ValidURL(BString);
+
 private:
 		BPath		fLastDir;
 		BRect		fPosition;
@@ -44,6 +50,8 @@ private:
 		bool		originalStateAuto;
 		bool		originalStateClear;
 		bool		originalStateHistory;
+		
+		BObjectList<BString>	fValidAddressList;
 };
 
 #endif	/* SETTINGS_H */

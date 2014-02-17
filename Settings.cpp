@@ -18,7 +18,8 @@
 
 #include "Settings.h"
 
-static const char kSettingsFile[] = "UberTuber_settings";
+#include <stdio.h>
+#include <stdlib.h>
 
 
 Settings::Settings()
@@ -52,6 +53,63 @@ Settings::Settings()
 			originalPosition = fPosition;
 		}
 	}
+	if (find_directory(B_USER_SETTINGS_DIRECTORY, &path) == B_OK) {
+		path.Append(kMonitorFile);
+		
+		FILE* file;
+		char* line = NULL;
+		size_t len = 0;
+		ssize_t read;
+		
+		file = fopen(path.Path(), "r");
+		if (file == NULL) {
+			printf("Monitor file doesn't exist -> create it.\n");
+
+			BString* command = new BString(
+			"touch %FILE% ; "
+			"printf \""
+			"# UberTuber's list of monitored websites\n"
+			"#\n"
+			"# UberTuber monitors the clipboard and auto-inserts the URL of a known\n"
+			"# website into its URL text field. The 'known' websites are defined in this\n"
+			"# text file. See http://rg3.github.io/youtube-dl/supportedsites.html for a\n"
+			"# list of reportedly working sites.\n"
+			"#\n"
+			"# Add, remove or edit URLs to your needs. One URL per line.\n"
+			"\n"
+			"blip.tv\n"
+			"escapistmagazine.com/videos/view\n"
+			"dailymotion.com\n"
+			"depositfiles.com\n"
+			"facebook.com/video\n"
+			"metacafe.com/watch\n"
+			"photobucket.com\n"
+			"video.google.com\n"
+			"video.yahoo.com\n"
+			"vimeo.com\n"
+			"youtu.be\n"
+			"youtube.com/embed\n"
+			"youtube.com/watch\n"
+			"youtube-nocookie.com\n\" > %FILE% ; "
+			"settype -t text/plain %FILE% ; "
+			"exit");
+			command->ReplaceAll("%FILE%", path.Path());
+			system(command->String());
+				
+			file = fopen(path.Path(), "r");
+		}
+		while ((read = getline(&line, &len, file)) != -1) {
+			if ((line[0] == '#') || (read == 1))	// Comment or empty
+				continue;
+			
+			/* strip trailing newline */
+			for (int i = 0; (unsigned) i < strlen(line); i++) {
+				if (line[i] == '\n' || line[i] == '\r' )
+					line[i] = '\0';
+			}
+			fValidAddressList.AddItem(new BString(line));
+		}
+    }
 }
 
 
@@ -85,6 +143,22 @@ Settings::~Settings()
 		msg.AddRect("windowlocation", fPosition);
 		msg.Flatten(&file);
 	}
+}
+
+
+bool
+Settings::ValidURL(BString url)
+{
+	bool valid = false;
+
+	for (int32 i = 0; i < fValidAddressList.CountItems(); i++) {
+		BString* address = fValidAddressList.ItemAt(i);
+		if (url.IFindFirst(address->String()) != B_ERROR) {
+			valid = true;
+			break;
+		}
+	}
+	return valid;
 }
 
 

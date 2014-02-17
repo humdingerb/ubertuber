@@ -39,6 +39,7 @@ enum {
 	msgAUTO		= 'auto',
 	msgCLEAR	= 'clea',
 	msgCLEARHIST = 'clhi',
+	msgEDIT		= 'edit',
 	msgHISTORY	= 'hist',
 	msgPLAY		= 'ypla',
 	msgSAVE		= 'esav',
@@ -64,7 +65,6 @@ private:
 		void			ResetFlags();
 		void			SetStatus(char* text);
 		void			TruncateTitle();
-		bool			ValidURL(BString url);
 
 		void			PlayClip();
 		void			SaveClip();

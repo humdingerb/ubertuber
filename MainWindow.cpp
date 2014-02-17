@@ -34,15 +34,6 @@
 #include <stdio.h>
 
 
-BString validAddress[] = {
-	"youtube.com/watch", "youtube.com/embed", "youtu.be", "youtube-nocookie.com",
-	"metacafe.com/watch", "dailymotion.com", "video.google.com", "photobucket.com", 
-	"video.yahoo.com", "depositfiles.com", "facebook.com/video", "vimeo.com",
-	"blip.tv", "escapistmagazine.com/videos/view",
-	0
-};
-
-
 int32
 _call_script(void* arg)
 {
@@ -142,6 +133,9 @@ MainWindow::_BuildMenu()
 	menu->AddItem(item = fClearMenu = new BMenuItem(
 		"Remove temporary files on quit", new BMessage(msgCLEAR)));
 	item->SetMarked(fSettings.StateClear());
+	menu->AddSeparatorItem();
+	menu->AddItem(item = new BMenuItem(
+		"Edit monitored websites" B_UTF8_ELLIPSIS, new BMessage(msgEDIT)));
 	fMenuBar->AddItem(menu);
 
 //	The future History menu:
@@ -227,7 +221,7 @@ MainWindow::MessageReceived(BMessage* msg)
 				break;
 			}
 
-			if (ValidURL(clipboardString) == false) {
+			if (fSettings.ValidURL(clipboardString) == false) {
 				printf("Not valid: break!\n");
 				break;
 			}
@@ -263,6 +257,47 @@ MainWindow::MessageReceived(BMessage* msg)
 		case msgCLEARHIST:
 		{
 			printf("Clear history!\n");
+			break;
+		}
+		case msgEDIT:
+		{
+			BPath path;
+			if (find_directory(B_USER_SETTINGS_DIRECTORY, &path) == B_OK) {
+				path.Append(kMonitorFile);
+				BString* command = new BString(
+				"if [ ! -e %FILE% ] ; then "
+				"touch %FILE% ; "
+				"printf \""
+				"# UberTuber's list of monitored websites\n"
+				"#\n"
+				"# UberTuber monitors the clipboard and auto-inserts the URL of a known\n"
+				"# website into its URL text field. The 'known' websites are defined in this\n"
+				"# text file. See http://rg3.github.io/youtube-dl/supportedsites.html for a\n"
+				"# list of reportedly working sites.\n"
+				"#\n"
+				"# Add, remove or edit URLs to your needs. One URL per line.\n"
+				"\n"
+				"blip.tv\n"
+				"escapistmagazine.com/videos/view\n"
+				"dailymotion.com\n"
+				"depositfiles.com\n"
+				"facebook.com/video\n"
+				"metacafe.com/watch\n"
+				"photobucket.com\n"
+				"video.google.com\n"
+				"video.yahoo.com\n"
+				"vimeo.com\n"
+				"youtu.be\n"
+				"youtube.com/embed\n"
+				"youtube.com/watch\n"
+				"youtube-nocookie.com\n\" > %FILE% ; "
+				"settype -t text/plain %FILE% ; "
+				"fi ; "
+				"open %FILE% ; "
+				"exit");
+				command->ReplaceAll("%FILE%", path.Path());
+				system(command->String());
+			}
 			break;
 		}
 		case msgHISTORY:
@@ -517,23 +552,6 @@ MainWindow::KillThread()
 	kill_thread((thread_id) ID);	
 	
 	return;
-}
-
-
-bool
-MainWindow::ValidURL(BString url)
-{
-	bool valid = false;
-	int i = 0;
-	
-	while (validAddress[i] != 0) {
-		if (url.IFindFirst(validAddress[i]) != B_ERROR) {
-			valid = true;
-			break;
-		}
-		i++;
-	}
-	return valid;
 }
 
 

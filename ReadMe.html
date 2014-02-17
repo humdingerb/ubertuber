@@ -79,12 +79,13 @@ for <a href="http://www.haiku-os.org">Haiku</a><br />
 <p><br /></p>
 <p>UberTuber grabs clips from various sites and opens them in your media player while they're being downloaded. This is as close to	streaming as it gets until Haiku's MediaKit grows real streaming support.</p>
 <p>The actual work is done in the back-end, using the Python script <tt>youtube-dl</tt> which downloads the video file to your temporary folder. From there it is either played back while it gets downloaded or moved	to another location you determine in a file dialog.</p>
-<p>UberTuber monitors the system clipboard for URLs pointing to the supported websites and automatically inserts them into its URL text field. Now you just have to decide to either play or save the clip to	start the download.</p>
-<p>This depends on the underlying script, which may get updated from time to time. At this moment there is support for clips from:</p>
+<p>UberTuber monitors the system clipboard for URLs pointing to the supported websites and automatically inserts them into its URL text field. Now you just have to decide to either play or save the clip to start the download.</p>
+<p>This depends on the underlying script, which gets updated from time to time. At this moment there is support for clips from:</p>
 <div align="center"><p><i>YouTube, Google video, MetaCafe, DailyMotion, Yahoo video,<br />
 Photobucket, DepositFiles, Vimeo.com, blip.tv, Facebook video<br />
-and Escapist magazine.</i></p></div>
-<p>It may also work on videos from other sites... Give it a try!</p>
+ Escapist magazine, and many many more sites...</i></p></div>
+<p>Youtube-dl's website has a <a href="http://rg3.github.io/youtube-dl/supportedsites.html">list of reportedly working sites</a>.
+</p>
 
 <h2>
 <a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
@@ -98,6 +99,8 @@ and Escapist magazine.</i></p></div>
 This starts playback automatically, if a valid URL is detected in the clipboard. Convenient if you run UberTuber in the background while surfing the web: just copy the link to a clip in the browser and a few seconds later your media player starts playing it back.</p></li>
 <li><p><b>Remove temporary files on quit</b><br />
 The temporary folder is emptied when you shutdown Haiku. If you watch lots of long clips, disk space may become a concern. Check this option to have all temporary files deleted as soon as you quit UberTuber.</p></li>
+<li><p><b>Edit monitored websites...</b><br />
+UberTuber monitors the system clipboard and automatically puts a URL it recognizes into its URL text box. With this menu item, you can change or add to this list of 'known' websites. It opens the settings file <tt>~/config/settings/UberTuber_monitored_sites</tt> in your text editor. Just put the distinguishing part of a site's URL in a new line and save the changes. UberTuber will immediately start recognizing the new address.</p></li>
 </ul>
 
 <h2>
@@ -105,8 +108,7 @@ The temporary folder is emptied when you shutdown Haiku. If you watch lots of lo
 <a id="tips+tricks" name="tips+tricks">Tips & Tricks</a></h2>
 <ul>
 <li><p><b>Copied URLs won't automatically show up in UberTuber.</b><br />
-The URL might fall through UberTuber's very simple test if it's from a supported site. I'm afraid you'll have to paste it into the URL field by hand...<br />
-Send me the URL and I add it to the auto-insert filter for supported sites in a future release.</p></li>
+The URL might fall through UberTuber's very simple test if it's from a supported site. You can add new URL-patterns or edit/remove existing patterns of that clipboard monitor, see the <i>Edit monitored websites...</i> menu item mentioned above.</p></li>
 <li><p><b>UberTuber won't play/download clips from site X.</b><br />
 Probably the website isn't supported by the <tt>youtube-dl</tt> script. Your only hope is that it has been added recently. Check the youtube-dl package for updates.</p></li>
 <li><p><b>How can I play back embedded videos?</b><br />
@@ -187,6 +189,12 @@ Still not perfect, I guess, but better...</li>
 <li>Removed youtube-dl from UberTuber package and declare that as dependancy.</li>
 <li>Removed menu to update youtube-dl. It always was a security hole and now that the package managment is enforcing read-only locations for packages, it would take too many hoops to jump through to maintain this security nightmare...</li>
 <li>Simplify code, making use of ps' new -o option. Simplify tests for running thread name.</li>
+</ul>
+<p><b>0.9.9</b> - <i>18-02-2014:</i></p>
+<ul>
+<li>Keep the GUI responsive while getting the clip title. The GUI used to be frozen in the first few seconds of downloading a clip.</li>
+<li>The clipboard monitored URLs are now stored in the separate settings file <tt>~/config/settings/UberTuber_monitored_sites</tt>.</li>
+<li>Added menu item to edit the UberTuber_monitored_sites settings file in the text editor.</li>
 </ul>
 
 </body>

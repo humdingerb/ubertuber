@@ -54,16 +54,16 @@ App::MessageReceived(BMessage* msg)
 void
 App::AboutRequested()
 {
-	BAlert *alert = new BAlert("about", "UberTuber   v0.9.8\n"
+	BAlert* alert = new BAlert("about", "UberTuber   v0.9.9\n"
 		"\twritten by Humdinger\n"
 		"\tbased on ideas of Leszek's YAVTD\n"
-		"\tCopyright 2011-2013\n\n"
+		"\tCopyright 2011-2014\n\n"
 		"UberTuber uses a script to download YouTube videos.\n"
 		"Clips can be saved or played back directly. UberTuber monitors "
 		"the system clipboard for newly copied URLs and has an 'Auto-play' "
-		"option that'll start playback as soon as a YouTube URL is detected.\n",
+		"option that'll start playback as soon as a supported URL is detected.\n",
 		"Thank you");
-	BTextView *view = alert->TextView();
+	BTextView* view = alert->TextView();
 	BFont font;
 
 	view->SetStylable(true);
@@ -74,10 +74,11 @@ App::AboutRequested()
 	alert->Go();
 }
 
+
 int
 main()
 {
-	App *app = new App();
+	App* app = new App();
 	app->Run();
 	delete app;
 	return 0;
