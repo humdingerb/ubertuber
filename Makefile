@@ -1,6 +1,6 @@
 NAME= UberTuber
 TYPE= APP
-SRCS= App.cpp MainWindow.cpp Settings.cpp
+SRCS= App.cpp MainWindow.cpp Settings.cpp WorkerThread.cpp
 RDEFS= UberTuber.rdef
 LIBS= be tracker $(STDCPPLIBS)
 LIBPATHS=
