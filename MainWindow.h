@@ -16,6 +16,7 @@
 #include "WorkerThread.h"
 
 #include <Button.h>
+#include <Directory.h>
 #include <FilePanel.h>
 #include <Menu.h>
 #include <MenuBar.h>
@@ -43,7 +44,10 @@ enum {
 	msgHISTORY	= 'hist',
 	msgPLAY		= 'ypla',
 	msgSAVE		= 'esav',
-	msgURL		= 'urly'
+	msgURL		= 'urly',
+
+	FOLDER_SELECT_MESSAGE = 'fsel',
+	SELECT_THIS_DIR_MESSAGE = 'sdir'
 };
 
 
@@ -75,7 +79,7 @@ private:
 		BButton*		fPlayButton;
 		BButton*		fSaveButton;
 
-		BFilePanel*		fSavePanel;
+		BFilePanel*		fSaveFilePanel;
 
 		BMenuBar*		fMenuBar;
 		BMenuItem*		fAbortMenu;

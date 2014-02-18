@@ -44,11 +44,31 @@ _call_script(void* arg)
 }
 
 
+class DirectoryFilter : public BRefFilter {
+public:
+	DirectoryFilter() {};
+	virtual bool Filter(const entry_ref* ref,
+		BNode* node, struct stat_beos* st, const char* filetype)
+	{
+		// ToDo: Fix this properly in Tracker
+		// If you create a folder, then rename it, node is NULL.
+		// The BeBook says: "Note that the function is never sent an
+		// abstract entry, so the node, st, and filetype arguments will
+		// always be valid."
+		return node == NULL ? false : node->IsDirectory();
+	}
+};
+
+
+// #pragma mark -
+
+
 MainWindow::MainWindow()
 	:
 	BWindow(BRect(), "UberTuber", B_TITLED_WINDOW,
 		B_NOT_V_RESIZABLE | B_NOT_ZOOMABLE | B_ASYNCHRONOUS_CONTROLS |
 		B_QUIT_ON_WINDOW_CLOSE | B_AUTO_UPDATE_SIZE_LIMITS),
+	fSaveFilePanel(NULL),
 	fAbortedFlag(false),
 	fGetFlag(false),
 	fGotClipFlag(false),
@@ -77,21 +97,6 @@ MainWindow::MainWindow()
 		if (!screen.Frame().InsetByCopy(10, 10).Intersects(Frame()))
 			CenterOnScreen();
 	}
-
-	BEntry entry(fSettings.LastDir().Path(), true);
-	entry_ref destRef;
-	if (entry.Exists() && entry.IsDirectory())
-		entry.GetRef(&destRef);
-
-	fSavePanel = new BFilePanel(B_OPEN_PANEL, new BMessenger(this), &destRef,
-		B_DIRECTORY_NODE);
-
-	if (fSavePanel->Window()->Lock()) {
-		fSavePanel->Window()->SetTitle("Choose destination folder");
-		fSavePanel->SetButtonLabel(B_DEFAULT_BUTTON, "Save");
-		fSavePanel->Window()->Unlock();
-	}
-
 	WatchMonitoredSitesList();
 	be_clipboard->StartWatching(this);
 	PostMessage(B_CLIPBOARD_CHANGED);
@@ -208,6 +213,9 @@ MainWindow::_BuildLayout()
 }
 
 
+// #pragma mark -
+
+
 status_t
 MainWindow::WatchMonitoredSitesList()
 {
@@ -227,6 +235,33 @@ MainWindow::WatchMonitoredSitesList()
 void
 MainWindow::MessageReceived(BMessage* msg)
 {
+	if (msg->WasDropped()) {
+		entry_ref ref;
+		int32 i = 0;
+		if (msg->FindRef("refs", i++, &ref) == B_OK) {
+			printf("File dropped: %s\n -------- \n", ref.name);
+//			fURLBox->SetText(DroppedFile(&ref));
+			msg->PrintToStream();
+		}
+		return;
+	}
+//		printf("\n -------- \n");
+//		const char* text;
+//		ssize_t size;
+//		uint32 c;
+//		if (msg->FindData("application/x-vnd.Be-bookmark", B_MIME_TYPE,
+//				(const void**)&text, &size) == B_OK) {
+//			printf("%s\n", text);
+//			fURLBox->SetText(text);
+//
+//			return;
+//		}
+//	}
+	
+	entry_ref inRef;
+//	char buffer[40];
+	BEntry inEntry;
+	
 	switch (msg->what)
 	{
 		case B_NODE_MONITOR:
@@ -260,8 +295,7 @@ MainWindow::MessageReceived(BMessage* msg)
 			}
 
 			fURLBox->SetText(clipboardString.String());
-			SetStatus("Auto-inserted clipboard URL");
-
+			
 			if (!fGetFlag) {
 				fPlayButton->SetEnabled(true);
 				fSaveButton->SetEnabled(true);
@@ -273,6 +307,97 @@ MainWindow::MessageReceived(BMessage* msg)
 				if (fSettings.StateAuto())
 					PostMessage(msgPLAY);
 			}
+			SetStatus("Auto-inserted URL");
+			break;
+		}
+		
+		case msgSAVE:
+		{
+			// Execute Save Panel
+			if (fSaveFilePanel == NULL) {
+				BButton* selectThisDir;
+
+				BMessage folderSelect(FOLDER_SELECT_MESSAGE);
+				BEntry entry(fSettings.LastDir().Path(), true);
+				entry_ref destRef;
+				if (entry.Exists() && entry.IsDirectory())
+					entry.GetRef(&destRef);
+		
+				fSaveFilePanel = new BFilePanel(B_OPEN_PANEL, NULL, &destRef,
+					B_DIRECTORY_NODE, true, &folderSelect, NULL, false, true);
+				fSaveFilePanel->SetButtonLabel(B_DEFAULT_BUTTON, "Select");
+				fSaveFilePanel->SetTarget(this);
+
+				fSaveFilePanel->Window()->Lock();
+				fSaveFilePanel->Window()->SetTitle("Choose destination folder");
+				BRect buttonRect
+					= fSaveFilePanel->Window()->ChildAt(0)->FindView(
+						"cancel button")->Frame();
+				buttonRect.right  = buttonRect.left - 20;
+				buttonRect.left = buttonRect.right - 130;
+				selectThisDir = new BButton(buttonRect, NULL, "Select this folder",
+					new BMessage(SELECT_THIS_DIR_MESSAGE),
+					B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT);
+				selectThisDir->SetTarget(this);
+				fSaveFilePanel->Window()->ChildAt(0)->AddChild(selectThisDir);
+				fSaveFilePanel->Window()->Unlock();
+
+				fSaveFilePanel->SetRefFilter(new DirectoryFilter);
+			}
+			fURL = new BString(fURLBox->Text());
+			fSaveFilePanel->Show();
+			break;
+		}
+		case FOLDER_SELECT_MESSAGE:
+		{
+			// "SELECT" Button at Save Panel Pushed
+			fSaveFilePanel->GetNextSelectedRef(&inRef);
+			inEntry.SetTo(&inRef, true);
+
+			BPath path(&inEntry);
+
+			fSaveDir = new BString(path.Path());
+			printf("Save path: %s\n", path.Path());
+
+	 	 	if (fGotClipFlag)
+	 	 		SaveClip();
+	 	 	else if (!fGetFlag && !fGotClipFlag) {
+	 	 		fSaveIt = true;
+	 	 	 	GetClip();
+	 	 	} else
+	 	 		fSaveIt = true;
+
+			fSaveButton->SetEnabled(false);
+			fSaveMenu->SetEnabled(false);
+			fSettings.SetLastDir(path);
+
+			fSaveFilePanel->Rewind();
+			break;
+		}
+		case SELECT_THIS_DIR_MESSAGE:
+		{
+			// "THIS DIR" Button at Save Panel Pushed
+			fSaveFilePanel->GetPanelDirectory(&inRef);
+			fSaveFilePanel->Hide();
+			inEntry.SetTo(&inRef, true);
+
+			BPath path(&inEntry);
+
+			fSaveDir = new BString(path.Path());
+			printf("Save path: %s\n", path.Path());
+
+	 	 	if (fGotClipFlag)
+	 	 		SaveClip();
+	 	 	else if (!fGetFlag && !fGotClipFlag) {
+	 	 		fSaveIt = true;
+	 	 	 	GetClip();
+	 	 	} else
+	 	 		fSaveIt = true;
+
+			fSaveButton->SetEnabled(false);
+			fSaveMenu->SetEnabled(false);
+			fSettings.SetLastDir(path);
+
 			break;
 		}
 		case msgAUTO:
@@ -338,7 +463,6 @@ MainWindow::MessageReceived(BMessage* msg)
 			fSettings.SetStateHistory(!fSettings.StateHistory());
 			fHistoryMenu->SetMarked(fSettings.StateHistory());
 			break;
-
 		}
 		case msgABORT:
 		{
@@ -371,34 +495,28 @@ MainWindow::MessageReceived(BMessage* msg)
 			fPlayMenu->SetEnabled(false);
 			break;
 		}
-		case msgSAVE:
-		{
-			fURL = new BString(fURLBox->Text());
-			fSavePanel->Show();
-			break;
-		}
-		case B_REFS_RECEIVED:
-		{
-			entry_ref fileref;
-			msg->FindRef("refs", 0, &fileref);
-			BPath path(new BEntry(&fileref));
-
-			fSaveDir = new BString(path.Path());
-			printf("Save path: %s\n", path.Path());
-
-	 	 	if (fGotClipFlag)
-	 	 		SaveClip();
-	 	 	else if (!fGetFlag && !fGotClipFlag) {
-	 	 		fSaveIt = true;
-	 	 	 	GetClip();
-	 	 	} else
-	 	 		fSaveIt = true;
-
-			fSaveButton->SetEnabled(false);
-			fSaveMenu->SetEnabled(false);
-			fSettings.SetLastDir(path);
-			break;
-		}
+//		case B_REFS_RECEIVED:
+//		{
+//			entry_ref fileref;
+//			msg->FindRef("refs", 0, &fileref);
+//			BPath path(new BEntry(&fileref));
+//
+//			fSaveDir = new BString(path.Path());
+//			printf("Save path: %s\n", path.Path());
+//
+//	 	 	if (fGotClipFlag)
+//	 	 		SaveClip();
+//	 	 	else if (!fGetFlag && !fGotClipFlag) {
+//	 	 		fSaveIt = true;
+//	 	 	 	GetClip();
+//	 	 	} else
+//	 	 		fSaveIt = true;
+//
+//			fSaveButton->SetEnabled(false);
+//			fSaveMenu->SetEnabled(false);
+//			fSettings.SetLastDir(path);
+//			break;
+//		}
 		case msgURL:
 		{
 			if (!fGetFlag) {
@@ -504,25 +622,6 @@ MainWindow::MessageReceived(BMessage* msg)
 }
 
 
-void
-MainWindow::FrameResized(float width, float height)
-{
-		TruncateTitle();
-}
-
-
-void
-MainWindow::TruncateTitle()
-{
-	float widthURL(fURLBox->Bounds().Width());
-	BString* title = new BString(fClipTitle);
-	fTitleView->TruncateString(title, B_TRUNCATE_END, widthURL - 120.0);
-	fTitleView->SetText(title->String());
-	
-	return;
-}
-
-
 bool
 MainWindow::QuitRequested()
 {
@@ -559,6 +658,35 @@ MainWindow::QuitRequested()
 	be_app->PostMessage(B_QUIT_REQUESTED);
 	return true;
 }
+
+
+void
+MainWindow::FrameResized(float width, float height)
+{
+		TruncateTitle();
+}
+
+
+void
+MainWindow::TruncateTitle()
+{
+	float widthURL(fURLBox->Bounds().Width());
+	BString* title = new BString(fClipTitle);
+	fTitleView->TruncateString(title, B_TRUNCATE_END, widthURL - 120.0);
+	fTitleView->SetText(title->String());
+	
+	return;
+}
+
+//BString
+//MainWindow::DroppedFile(entry_ref &ref)
+//{
+//	BNode node(ref);
+//	
+//}
+
+
+// #pragma mark -
 
 
 void
@@ -608,6 +736,9 @@ MainWindow::SetStatus(char* text)
 	fStatusView->SetText(text);
 	return;
 }
+
+
+// #pragma mark -
 
 
 BString
@@ -670,20 +801,19 @@ MainWindow::PlayClip()
 	"until [ -e \"$FILE.part\" ] || [ -e \"$FILE\" ] ; do " // wait until file exists
 	"sleep 1 ; "
 	"done ; "
-	"settype -t video/mpeg4 \"$FILE.part\" ; "	// Force MPEG4 for MediaPlayer
-	"settype -t video/mpeg4 \"$FILE\" ; "
-	"hey application/x-vnd.UberTuber play ; "
+	"sleep 2 ; "		// buffering a bit
 	"if [ -e \"$FILE.part\" ] ; then "
+	"settype -t video/mpeg4 \"$FILE.part\" ; "	// Force MPEG4 for MediaPlayer
+	"hey application/x-vnd.UberTuber play ; "
 	"open \"$FILE.part\" ; "
 	"elif [ -e \"$FILE\" ] ; then "
+	"settype -t video/mpeg4 \"$FILE\" ; "		// Force MPEG4 for MediaPlayer"
+	"hey application/x-vnd.UberTuber play ; "
 	"open \"$FILE\" ; "
-	"else "
-	"hey application/x-vnd.UberTuber erro ; "
-	"exit 1 ; "
 	"fi ; "
 	"sleep 1 ; "
-	"TITLETHREAD1=$(echo $FILE | cut -c 1-45) ; "
-	"TITLETHREAD2=$(echo $FILE.part | cut -c 1-45) ; "
+	"TITLETHREAD1=$(echo $FILE | cut -c 1-29) ; "
+	"TITLETHREAD2=$(echo $FILE.part | cut -c 1-29) ; "
 	"waitfor -e \"w>$TITLETHREAD1\" ; "
 	"waitfor -e \"w>$TITLETHREAD2\" ; "
 	"if [ -e \"$FILE.part\" ] ; then "	
@@ -700,9 +830,6 @@ MainWindow::PlayClip()
 		command->ReplaceAll("%DIR%", fSaveDir->String());
 	else
 		command->ReplaceAll("%DIR%", "/tmp/ubertuber");
-
-	if (fSavedFlag || fPlayedFlag || fGotClipFlag)
-		command->RemoveAll("sleep 2 ; ");
 
 	thread_id playthread = spawn_thread(_call_script, "Clip player",
 		B_LOW_PRIORITY, command);
