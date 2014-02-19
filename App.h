@@ -17,11 +17,17 @@
 class App : public BApplication {
 public:
 						App();
+		virtual			~App();
+		virtual	void	ArgvReceived(int32 argc, char** argv);
+		virtual	void	RefsReceived(BMessage* message);
+
+		virtual	void	ReadyToRun();
 		void			AboutRequested();
-		void			MessageReceived(BMessage* msg);
+		void			MessageReceived(BMessage* message);
 
 private:
 		MainWindow*		fMainWindow;
+		BMessage*		fSavedRefsReceived;
 };
 
 #endif /* APP_H */

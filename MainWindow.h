@@ -70,6 +70,7 @@ private:
 		void			ResetFlags();
 		void			SetStatus(char* text);
 		void			TruncateTitle();
+		void			URLofFile(entry_ref &ref);
 
 		void			PlayClip();
 		void			SaveClip();

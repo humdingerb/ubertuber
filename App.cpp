@@ -18,17 +18,59 @@ extern const char *kApplicationSignature = "application/x-vnd.UberTuber";
 
 
 App::App()
-	:	BApplication("application/x-vnd.UberTuber")
+	:
+	BApplication("application/x-vnd.UberTuber"),
+	fSavedRefsReceived(NULL)	
 {
 	fMainWindow = new MainWindow();
 	fMainWindow->Show();
 }
 
 
-void
-App::MessageReceived(BMessage* msg)
+App::~App()
 {
-	switch (msg->what)
+	delete fSavedRefsReceived;
+}
+
+
+void
+App::ArgvReceived(int32 argc, char** argv)
+{
+	BMessage refsReceived(B_REFS_RECEIVED);
+	for (int32 i = 1; i < argc; i++) {
+		BEntry entry(argv[i], true);
+		entry_ref ref;
+		if (entry.GetRef(&ref) == B_OK)
+			refsReceived.AddRef("refs", &ref);
+	}
+	if (refsReceived.HasRef("refs"))
+		PostMessage(&refsReceived);
+}
+
+
+void
+App::RefsReceived(BMessage* message)
+{
+	if (!message->HasRef("refs") && message->HasRef("dir_ref")) {
+		entry_ref dirRef;
+		if (message->FindRef("dir_ref", &dirRef) == B_OK)
+			message->AddRef("refs", &dirRef);
+	}
+
+	if (fMainWindow == NULL) {
+		// ReadyToRun() has not been called yet, this happens when someone
+		// launches us with a B_REFS_RECEIVED message.
+		delete fSavedRefsReceived;
+		fSavedRefsReceived = new BMessage(*message);
+	} else
+		fMainWindow->PostMessage(message);
+}
+
+
+void
+App::MessageReceived(BMessage* message)
+{
+	switch (message->what)
 	{
 		case statBUFFER:
 		case statDOWNLOAD:
@@ -38,15 +80,27 @@ App::MessageReceived(BMessage* msg)
 		case statFINISH_SAVE:
 		case statPLAYING:
 		{
-			msg->PrintToStream();
+//			message->PrintToStream();
 			fMainWindow->PostMessage(DetachCurrentMessage());
 			break;
 		}
 		default:
 		{
-			BApplication::MessageReceived(msg);
+			BApplication::MessageReceived(message);
 			break;
 		}
+	}
+}
+
+
+void
+App::ReadyToRun()
+{	
+	if (fSavedRefsReceived) {
+		// RefsReceived() was called earlier than ReadyToRun()
+		fMainWindow->PostMessage(fSavedRefsReceived);
+		delete fSavedRefsReceived;
+		fSavedRefsReceived = NULL;
 	}
 }
 

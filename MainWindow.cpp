@@ -239,27 +239,13 @@ MainWindow::MessageReceived(BMessage* msg)
 		entry_ref ref;
 		int32 i = 0;
 		if (msg->FindRef("refs", i++, &ref) == B_OK) {
-			printf("File dropped: %s\n -------- \n", ref.name);
-//			fURLBox->SetText(DroppedFile(&ref));
-			msg->PrintToStream();
+//			printf("File dropped: %s\n -------- \n", ref.name);
+			URLofFile(ref);
 		}
 		return;
 	}
-//		printf("\n -------- \n");
-//		const char* text;
-//		ssize_t size;
-//		uint32 c;
-//		if (msg->FindData("application/x-vnd.Be-bookmark", B_MIME_TYPE,
-//				(const void**)&text, &size) == B_OK) {
-//			printf("%s\n", text);
-//			fURLBox->SetText(text);
-//
-//			return;
-//		}
-//	}
 	
 	entry_ref inRef;
-//	char buffer[40];
 	BEntry inEntry;
 	
 	switch (msg->what)
@@ -495,28 +481,16 @@ MainWindow::MessageReceived(BMessage* msg)
 			fPlayMenu->SetEnabled(false);
 			break;
 		}
-//		case B_REFS_RECEIVED:
-//		{
-//			entry_ref fileref;
-//			msg->FindRef("refs", 0, &fileref);
-//			BPath path(new BEntry(&fileref));
-//
-//			fSaveDir = new BString(path.Path());
-//			printf("Save path: %s\n", path.Path());
-//
-//	 	 	if (fGotClipFlag)
-//	 	 		SaveClip();
-//	 	 	else if (!fGetFlag && !fGotClipFlag) {
-//	 	 		fSaveIt = true;
-//	 	 	 	GetClip();
-//	 	 	} else
-//	 	 		fSaveIt = true;
-//
-//			fSaveButton->SetEnabled(false);
-//			fSaveMenu->SetEnabled(false);
-//			fSettings.SetLastDir(path);
-//			break;
-//		}
+		case B_REFS_RECEIVED:
+		{
+			entry_ref ref;
+			int32 i = 0;
+			if (msg->FindRef("refs", i++, &ref) == B_OK) {
+	//			printf("File dropped: %s\n -------- \n", ref.name);
+				URLofFile(ref);
+			}
+			break;
+		}
 		case msgURL:
 		{
 			if (!fGetFlag) {
@@ -610,6 +584,8 @@ MainWindow::MessageReceived(BMessage* msg)
 		case statPLAYING:
 		{
 			fPlayingFlag = true;
+			fAbortButton->SetEnabled(true);
+			fAbortMenu->SetEnabled(true);
 			SetStatus("Playing...");
 			break;
 		}
@@ -678,12 +654,33 @@ MainWindow::TruncateTitle()
 	return;
 }
 
-//BString
-//MainWindow::DroppedFile(entry_ref &ref)
-//{
-//	BNode node(ref);
-//	
-//}
+void
+MainWindow::URLofFile(entry_ref &ref)
+{
+	const ssize_t bufferSize = 256;
+	char buffer[bufferSize];
+	BNode node(&ref);
+	ssize_t readBytes;
+
+	readBytes = node.ReadAttr("META:url", B_STRING_TYPE, 0, buffer, bufferSize);
+	if (readBytes < 1)
+		SetStatus("No URL found");
+	else {
+		fURLBox->SetText(buffer);
+		if (!fGetFlag) {
+			fPlayButton->SetEnabled(true);
+			fSaveButton->SetEnabled(true);
+			fPlayMenu->SetEnabled(true);
+			fSaveMenu->SetEnabled(true);
+	
+			ResetFlags();
+	
+			if (fSettings.StateAuto())
+				PostMessage(msgPLAY);
+		}
+	}
+	return;
+}
 
 
 // #pragma mark -
@@ -782,9 +779,9 @@ MainWindow::GetClip()
 	fWorkerThread->Looper()->PostMessage(&msg, fWorkerThread);
 
 	fGetFlag = true;
-	fAbortButton->SetEnabled(true);
-	fAbortMenu->SetEnabled(true);
-	fAbortButton->SetEnabled(true);
+
+	fAbortButton->SetEnabled(fSaveIt);
+	fAbortMenu->SetEnabled(fSaveIt);
 
 	fURLBox->SetEnabled(false);
 	return true;
