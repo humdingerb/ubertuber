@@ -735,6 +735,14 @@ MainWindow::SetStatus(char* text)
 }
 
 
+void
+MainWindow::SetURL(BString* url)
+{
+	fURLBox->SetText(url->String());
+	return;
+}
+
+
 // #pragma mark -
 
 
@@ -795,29 +803,17 @@ MainWindow::PlayClip()
 	"hey application/x-vnd.UberTuber buff ; "
 	"cd %DIR% ; "
 	"FILE=$(youtube-dl --restrict-filenames --get-filename %URL% 2>&1 | tail -n 1) ; "
-	"until [ -e \"$FILE.part\" ] || [ -e \"$FILE\" ] ; do " // wait until file exists
+	"until [ -e \"$FILE\" ] ; do " // wait until file exists
 	"sleep 1 ; "
 	"done ; "
 	"sleep 2 ; "		// buffering a bit
-	"if [ -e \"$FILE.part\" ] ; then "
-	"settype -t video/mpeg4 \"$FILE.part\" ; "	// Force MPEG4 for MediaPlayer
-	"hey application/x-vnd.UberTuber play ; "
-	"open \"$FILE.part\" ; "
-	"elif [ -e \"$FILE\" ] ; then "
 	"settype -t video/mpeg4 \"$FILE\" ; "		// Force MPEG4 for MediaPlayer"
 	"hey application/x-vnd.UberTuber play ; "
 	"open \"$FILE\" ; "
-	"fi ; "
 	"sleep 1 ; "
-	"TITLETHREAD1=$(echo $FILE | cut -c 1-29) ; "
-	"TITLETHREAD2=$(echo $FILE.part | cut -c 1-29) ; "
-	"waitfor -e \"w>$TITLETHREAD1\" ; "
-	"waitfor -e \"w>$TITLETHREAD2\" ; "
-	"if [ -e \"$FILE.part\" ] ; then "	
-	"mimeset -F \"$FILE.part\" ; "				// Reset mimetype
-	"else "
-	"mimeset -F \"$FILE\" ; "
-	"fi ; "
+	"TITLETHREAD=$(echo $FILE | cut -c 1-29) ; "
+	"waitfor -e \"w>$TITLETHREAD\" ; "
+	"mimeset -F \"$FILE\" ; "				// Reset mimetype
 	"hey application/x-vnd.UberTuber pfin ; "
 	"exit");
 

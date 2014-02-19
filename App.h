@@ -28,6 +28,7 @@ public:
 private:
 		MainWindow*		fMainWindow;
 		BMessage*		fSavedRefsReceived;
+		BString*		fURLReceived;
 };
 
 #endif /* APP_H */

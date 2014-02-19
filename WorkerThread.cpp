@@ -77,7 +77,7 @@ WorkerThread::_GetClip(BString url)
 	"mkdir -p /tmp/ubertuber ; "
 	"cd /tmp/ubertuber ; "
 	"hey application/x-vnd.UberTuber down ; "
-	"youtube-dl --max-quality=22 --continue --restrict-filenames --no-cache-dir %URL% ; "
+	"youtube-dl --max-quality=22 --continue --restrict-filenames --no-part --no-cache-dir %URL% ; "
 	"while [ -n \"$(%TEST%)\" ] ; do " // wait for script to finish/aborted
 	"sleep 2 ; "
 	"done ; "

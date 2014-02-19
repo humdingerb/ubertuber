@@ -20,7 +20,8 @@ extern const char *kApplicationSignature = "application/x-vnd.UberTuber";
 App::App()
 	:
 	BApplication("application/x-vnd.UberTuber"),
-	fSavedRefsReceived(NULL)	
+	fSavedRefsReceived(NULL),
+	fURLReceived(NULL)	
 {
 	fMainWindow = new MainWindow();
 	fMainWindow->Show();
@@ -30,6 +31,7 @@ App::App()
 App::~App()
 {
 	delete fSavedRefsReceived;
+	delete fURLReceived;
 }
 
 
@@ -45,6 +47,8 @@ App::ArgvReceived(int32 argc, char** argv)
 	}
 	if (refsReceived.HasRef("refs"))
 		PostMessage(&refsReceived);
+	else
+		fURLReceived = new BString(argv[1]);
 }
 
 
@@ -101,6 +105,11 @@ App::ReadyToRun()
 		fMainWindow->PostMessage(fSavedRefsReceived);
 		delete fSavedRefsReceived;
 		fSavedRefsReceived = NULL;
+	}
+	if (fURLReceived){
+		fMainWindow->LockLooper();
+		fMainWindow->SetURL(fURLReceived);
+		fMainWindow->UnlockLooper();
 	}
 }
 

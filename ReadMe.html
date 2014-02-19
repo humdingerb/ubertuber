@@ -6,7 +6,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta http-equiv="Content-Style-Type" content="text/css" />
 	<meta name="robots" content="all" />
-	<title>Ubertuber</title>
+	<title>UberTuber</title>
 
 <style type="text/css">
 
@@ -73,7 +73,7 @@ tt {
 for <a href="http://www.haiku-os.org">Haiku</a><br />
 <i>by Humdinger</i></p>
 <hr />
-<p id="index"><a href="#settings">Settings</a> &mdash; <a href="#tips+tricks">Tips & Tricks & Troubleshooting</a> &mdash; <a href="#download">Download</a> &mdash; <a href="#bug+feedback">Bugreports and Feedback</a> &mdash; <a href="#thanks">Thanks</a> &mdash; <a href="#history">History</a><p>
+<p id="index"><a href="#settings">Settings</a> &mdash; <a href="#tips+tricks">Tips & Tricks</a> &mdash; <a href="#troubleshooting">Troubleshooting</a> &mdash; <a href="#download">Download</a> &mdash; <a href="#bug+feedback">Bugreports and Feedback</a> &mdash; <a href="#thanks">Thanks</a> &mdash; <a href="#history">History</a><p>
 </div>
 <hr />
 <p><br /></p>
@@ -105,20 +105,29 @@ UberTuber monitors the system clipboard and automatically puts a URL it recogniz
 
 <h2>
 <a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
-<a id="tips+tricks" name="tips+tricks">Tips & Tricks & Troubleshooting</a></h2>
+<a id="tips+tricks" name="tips+tricks">Tips & Tricks</a></h2>
+<ul>
+<li><p><b>How can I play back embedded videos?</b><br />
+In WebPositive, right-click on the black box of the embedded video and <span class="menu">Open frame in new window</span>. Now copy the URL and leave the rest to UberTuber's clipboard monitor.</p></li>
+<li><p><b>Can I use bookmarks?</b><br />
+UberTuber accepts a drag & dropped bookmark file (in fact any file with a META:url attribute). You can build up a library of video bookmarks while surfing with WebPositive, put them all in a folder and drag & drop one of them onto UberTuber.<br />
+Or you can select all your video bookmarks and use Tracker's add-on <i>FileType</i> to set UberTuber as their preferred application. Then you can start those video bookmarks in UberTuber with a doubleclick.</p></li>
+<li><p><b>What about starting from Terminal?</b><br />
+When started from the Terminal, UberTuber accepts currently only one argument: either the path to a bookmark file or the URL to a clip.
+</p></li>
+</ul>
+
+<h2>
+<a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
+<a id="troubleshooting" name="troubleshooting">Troubleshooting</a></h2>
 <ul>
 <li><p><b>Copied URLs won't automatically show up in UberTuber.</b><br />
 The URL might fall through UberTuber's very simple test if it's from a supported site. You can add new URL-patterns or edit/remove existing patterns of that clipboard monitor, see the <i>Edit monitored websites...</i> menu item mentioned above.</p></li>
 <li><p><b>UberTuber won't play/download clips from site X.</b><br />
 Probably the website isn't supported by the <tt>youtube-dl</tt> script. Your only hope is that it has been added recently. Check the youtube-dl package for updates.</p></li>
-<li><p><b>How can I play back embedded videos?</b><br />
-In WebPositive, right-click on the black box of the embedded video and <span class="menu">Open frame in new window</span>. Now copy the URL and leave the rest to UberTuber's clipboard monitor.</p></li>
 <li><p><b>Sometimes I get a General OS error.</b><br />
 This seems to be MediaPlayer's way to say that there hasn't been enough of the clip downloaded yet. It depends on the clip format and the speed of your internet connection. You can try closing the empty MediaPlayer window that pops up after the "General OS error" and press UberTuber's "Play" button once more.<br />
 The alternative is to increase the buffering time a few seconds, but that would increase the time everyone has to wait for every clip... Email me, if it happens untolerably often to you and I may consider adding an option for the buffering.</p></li>
-<li><p><b>Can I use bookmarks?</b><br />
-UberTuber accepts a drag & dropped bookmark file (in fact any file with a META:url attribute). You can build up a library of video bookmarks while surfing with WebPositive, put them all in a folder and drag & drop one of them onto UberTuber.<br />
-Or you can select all your video bookmarks and use Tracker's add-on <i>FileType</i> to set UberTuber as their preferred application. Then you can start those video bookmarks in UberTuber with a doubleclick.</p></li>
 </ul>
 
 <h2>
@@ -196,14 +205,16 @@ Still not perfect, I guess, but better...</li>
 <li>Removed menu to update youtube-dl. It always was a security hole and now that the package managment is enforcing read-only locations for packages, it would take too many hoops to jump through to maintain this security nightmare...</li>
 <li>Simplify code, making use of ps' new -o option. Simplify tests for running thread name.</li>
 </ul>
-<p><b>0.9.9</b> - <i>19-02-2014:</i></p>
+<p><b>0.9.9</b> - <i>20-02-2014:</i></p>
 <ul>
 <li>Keep the GUI responsive while getting the clip title. The GUI used to be frozen in the first few seconds of downloading a clip.</li>
+<li>Simplified code a bit by avoiding youtube-dl creating .part files</li>
 <li>The clipboard monitored URLs are now stored in a node monitored settings file <tt>~/config/settings/UberTuber_monitored_sites</tt>.</li>
 <li>Added a menu item to edit the UberTuber_monitored_sites settings file in the text editor.</li>
 <li>Added a "Select this folder" button to the save panel.</li>
 <li>Accept dropped bookmark files (or any file with a META:url attribute).</li>
 <li>Register bookmark files as supported types of UberTuber, enabling opening "video" bookmarks of WebPositive with UberTuber.</li>
+<li>Accept a URL or a bookmark as argument on the command line.</li>
 </ul>
 
 </body>

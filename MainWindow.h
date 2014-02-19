@@ -57,6 +57,7 @@ public:
 		void			MessageReceived(BMessage* msg);
 		bool			QuitRequested();
 		virtual void	FrameResized(float width, float height);
+		void			SetURL(BString* url);
 
 private:
 		void			_BuildMenu();
