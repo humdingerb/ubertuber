@@ -38,10 +38,10 @@ enum {
 
 	msgABORT	= 'abor',
 	msgAUTO		= 'auto',
-	msgCLEAR	= 'clea',
-	msgCLEARHIST = 'clhi',
+	msgCLEAN	= 'clen',
+	msgCLEARURL	= 'curl',
 	msgEDIT		= 'edit',
-	msgHISTORY	= 'hist',
+	msgOPENURL	= 'ourl',
 	msgPLAY		= 'ypla',
 	msgSAVE		= 'esav',
 	msgURL		= 'urly',
@@ -86,11 +86,11 @@ private:
 		BMenuBar*		fMenuBar;
 		BMenuItem*		fAbortMenu;
 		BMenuItem*		fAutoMenu;
-		BMenuItem*		fClearMenu;
-		BMenuItem*		fClearHistory;
-		BMenuItem*		fHistoryMenu;
+		BMenuItem*		fCleanMenu;
 		BMenuItem*		fPlayMenu;
 		BMenuItem*		fSaveMenu;
+		BMenuItem*		fClearURLMenu;
+		BMenuItem*		fOpenURLMenu;
 
 		BString			fClipTitle;
 		BString*		fFilename;

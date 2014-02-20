@@ -41,7 +41,6 @@ Settings::Settings()
 			BString dir;
 			msg.FindBool("autoplay", &fStateAuto);
 			msg.FindBool("clear", &fStateClear);
-			msg.FindBool("history", &fStateHistory);
 			msg.FindString("savefolder", &dir);
 			msg.FindRect("windowlocation", &fPosition);
 
@@ -50,7 +49,6 @@ Settings::Settings()
 			
 			originalStateAuto = fStateAuto;
 			originalStateClear = fStateClear;
-			originalStateHistory = fStateHistory;
 			originalLastDir = fLastDir;
 			originalPosition = fPosition;
 		}
@@ -128,7 +126,6 @@ Settings::~Settings()
 {
 	if (originalStateAuto == fStateAuto &&
 		originalStateClear == fStateClear &&
-		originalStateHistory == fStateHistory &&
 		originalLastDir == fLastDir &&
 		originalPosition == fPosition)
 			return;
@@ -149,7 +146,6 @@ Settings::~Settings()
 		
 		msg.AddBool("autoplay", fStateAuto);
 		msg.AddBool("clear", fStateClear);
-		msg.AddBool("history", fStateHistory);
 		msg.AddString("savefolder", dir);
 		msg.AddRect("windowlocation", fPosition);
 		msg.Flatten(&file);
@@ -196,7 +192,6 @@ Settings::SetDefaults()
 	fLastDir = path;
 	fStateAuto = false;
 	fStateClear = true;
-	fStateHistory = true;
 }
 
 
@@ -211,13 +206,6 @@ void
 Settings::SetStateClear(bool state)
 {
 	fStateClear = state;
-}
-
-
-void
-Settings::SetStateHistory(bool state)
-{
-	fStateHistory = state;
 }
 
 

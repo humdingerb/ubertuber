@@ -26,7 +26,6 @@ public:
 		BPath		LastDir() const { return fLastDir; }
 		bool		StateAuto() const { return fStateAuto; }
 		bool		StateClear() const { return fStateClear; }
-		bool		StateHistory() const { return fStateHistory; }
 		BRect		WindowPosition() const { return fPosition; }
 
 		void		SetChangedMonitoredList();
@@ -34,7 +33,6 @@ public:
 		void		SetLastDir(BPath);
 		void		SetStateAuto(bool);
 		void		SetStateClear(bool);
-		void		SetStateHistory(bool);
 		void		SetWindowPosition(BRect);
 
 		bool		ValidURL(BString);
@@ -45,13 +43,11 @@ private:
 		BRect		fPosition;
 		bool		fStateAuto;
 		bool		fStateClear;
-		bool		fStateHistory;
 
 		BPath		originalLastDir;
 		BRect		originalPosition;
 		bool		originalStateAuto;
 		bool		originalStateClear;
-		bool		originalStateHistory;
 		
 		BObjectList<BString>	fValidAddressList;
 		bool		fChangedMonitoredList;

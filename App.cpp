@@ -38,13 +38,20 @@ App::~App()
 void
 App::ArgvReceived(int32 argc, char** argv)
 {
-	BMessage refsReceived(B_REFS_RECEIVED);
-	for (int32 i = 1; i < argc; i++) {
-		BEntry entry(argv[i], true);
-		entry_ref ref;
-		if (entry.GetRef(&ref) == B_OK)
-			refsReceived.AddRef("refs", &ref);
+	if (strcmp(argv[1], "--help") == 0
+		|| strcmp(argv[1], "-h") == 0) {
+		printf("UberTuber can be launched with either a URL or a "
+			"Web+ Bookmark file.\n");
+		PostMessage(B_QUIT_REQUESTED);
+		return;
 	}
+
+	BMessage refsReceived(B_REFS_RECEIVED);
+	BEntry entry(argv[1], true);
+	entry_ref ref;
+	if (entry.GetRef(&ref) == B_OK)
+		refsReceived.AddRef("refs", &ref);
+
 	if (refsReceived.HasRef("refs"))
 		PostMessage(&refsReceived);
 	else
@@ -84,7 +91,6 @@ App::MessageReceived(BMessage* message)
 		case statFINISH_SAVE:
 		case statPLAYING:
 		{
-//			message->PrintToStream();
 			fMainWindow->PostMessage(DetachCurrentMessage());
 			break;
 		}

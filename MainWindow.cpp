@@ -132,29 +132,27 @@ MainWindow::_BuildMenu()
 	menu->AddItem(item = new BMenuItem("Quit", new BMessage(B_QUIT_REQUESTED),
 		'Q'));
 	fMenuBar->AddItem(menu);
+	
+	menu = new BMenu("URL");
+	menu->AddItem(item = fClearURLMenu = new BMenuItem("Clear URL field",
+		new BMessage(msgCLEARURL), 'D'));
+	fClearURLMenu->SetEnabled(false);
+	menu->AddItem(item = fOpenURLMenu = new BMenuItem("Open URL in browser",
+		new BMessage(msgOPENURL), 'O'));
+	fOpenURLMenu->SetEnabled(false);
+	fMenuBar->AddItem(menu);
 
 	menu = new BMenu("Settings");
 	menu->AddItem(item = fAutoMenu = new BMenuItem("Auto-play",
 		new BMessage(msgAUTO)));
 	item->SetMarked(fSettings.StateAuto());
-	menu->AddItem(item = fClearMenu = new BMenuItem(
-		"Remove temporary files on quit", new BMessage(msgCLEAR)));
+	menu->AddItem(item = fCleanMenu = new BMenuItem(
+		"Remove temporary files on quit", new BMessage(msgCLEAN)));
 	item->SetMarked(fSettings.StateClear());
 	menu->AddSeparatorItem();
 	menu->AddItem(item = new BMenuItem(
 		"Edit monitored websites" B_UTF8_ELLIPSIS, new BMessage(msgEDIT)));
 	fMenuBar->AddItem(menu);
-
-//	The future History menu:
-//	menu = new BMenu("History");
-//	menu->AddItem(item = fHistoryMenu = new BMenuItem("Activate history",
-//		new BMessage(msgHISTORY)));
-//	item->SetMarked(fSettings.StateHistory());
-//	menu->AddItem(item = new BMenuItem("Clear History",
-//		new BMessage(msgCLEARHIST)));
-//	menu->AddSeparatorItem();
-//
-//	fMenuBar->AddItem(menu);
 }
 
 
@@ -239,7 +237,6 @@ MainWindow::MessageReceived(BMessage* msg)
 		entry_ref ref;
 		int32 i = 0;
 		if (msg->FindRef("refs", i++, &ref) == B_OK) {
-//			printf("File dropped: %s\n -------- \n", ref.name);
 			URLofFile(ref);
 		}
 		return;
@@ -392,15 +389,10 @@ MainWindow::MessageReceived(BMessage* msg)
 			fAutoMenu->SetMarked(fSettings.StateAuto());
 			break;
 		}
-		case msgCLEAR:
+		case msgCLEAN:
 		{
 			fSettings.SetStateClear(!fSettings.StateClear());
-			fClearMenu->SetMarked(fSettings.StateClear());
-			break;
-		}
-		case msgCLEARHIST:
-		{
-			printf("Clear history!\n");
+			fCleanMenu->SetMarked(fSettings.StateClear());
 			break;
 		}
 		case msgEDIT:
@@ -442,12 +434,6 @@ MainWindow::MessageReceived(BMessage* msg)
 				command->ReplaceAll("%FILE%", path.Path());
 				system(command->String());
 			}
-			break;
-		}
-		case msgHISTORY:
-		{
-			fSettings.SetStateHistory(!fSettings.StateHistory());
-			fHistoryMenu->SetMarked(fSettings.StateHistory());
 			break;
 		}
 		case msgABORT:
@@ -499,6 +485,8 @@ MainWindow::MessageReceived(BMessage* msg)
 				fSaveButton->SetEnabled(state);
 				fPlayMenu->SetEnabled(state);
 				fSaveMenu->SetEnabled(state);
+				fClearURLMenu->SetEnabled(state);
+				fOpenURLMenu->SetEnabled(state);				
 
 				SetStatus("");
 				fTitleView->SetText("");
@@ -512,6 +500,18 @@ MainWindow::MessageReceived(BMessage* msg)
 		{
 			if (msg->FindString("title", &fClipTitle) == B_OK)
 				TruncateTitle();
+			break;
+		}
+		case msgCLEARURL:
+		{
+			fURLBox->SetText("");
+			break;
+		}
+		case msgOPENURL:
+		{
+			BString command("open %URL%");
+			command.ReplaceAll("%URL%", fURLBox->Text());
+			system(command);
 			break;
 		}
 
@@ -541,7 +541,7 @@ MainWindow::MessageReceived(BMessage* msg)
 		}
 		case statFINISH_GET:
 		{
-			if (!fPlayingFlag)
+			if (!fPlayingFlag && !fAbortedFlag)
 				SetStatus("Download finished");
 			fAbortButton->SetEnabled(false);
 			fAbortMenu->SetEnabled(false);
@@ -563,8 +563,10 @@ MainWindow::MessageReceived(BMessage* msg)
 				fAbortedFlag = true;
 				KillThread();
 			}
-			if (fAbortedFlag)
-				SetStatus("Aborted");	
+			if (fAbortedFlag) {
+				SetStatus("Aborted");
+				fGotClipFlag = false;
+			}
 			if (fGotClipFlag)
 				fPlayedFlag = true;
 

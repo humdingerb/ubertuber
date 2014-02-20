@@ -89,7 +89,7 @@ WorkerThread::_GetClip(BString url)
 	"fi ; "
 	"exit");
 
-	BString threadtest("ps | grep python | grep youtube-dl");
+	BString threadtest("ps | grep python | grep \"youtube-dl --max\"");
 
 	command->ReplaceAll("%TEST%", threadtest.String());
 	command->ReplaceAll("%URL%", url.String());
