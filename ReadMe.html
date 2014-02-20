@@ -128,6 +128,9 @@ Probably the website isn't supported by the <tt>youtube-dl</tt> script. Your onl
 <li><p><b>Sometimes I get a General OS error.</b><br />
 This seems to be MediaPlayer's way to say that there hasn't been enough of the clip downloaded yet. It depends on the clip format and the speed of your internet connection. You can try closing the empty MediaPlayer window that pops up after the "General OS error" and press UberTuber's "Play" button once more.<br />
 The alternative is to increase the buffering time a few seconds, but that would increase the time everyone has to wait for every clip... Email me, if it happens untolerably often to you and I may consider adding an option for the buffering.</p></li>
+<li><p><b>Sometimes UberTuber just sits there, buffering or whatever.</b><br />
+UberTuber is a bit of a hack as it tries to juggle the youtube-dl script and playback in MediaPlayer, while handling a possible aborting of these processes or saving the clip after playback has started. Add to that, that I'm a very unexperienced amateur "coder"... we're lucky it works at all most of the time.<br />
+If things get out of control, you may find several stray threads of the scripts running in the background after UberTuber was quit. You can find and kill these threads with the ProcessController replicant of the Deskbar. Hint: the name of the threads contain "UberTuber" or "youtube-dl" etc. Yes, it's messy...</p></li>
 </ul>
 
 <h2>
@@ -145,8 +148,8 @@ The alternative is to increase the buffering time a few seconds, but that would 
 <a id="thanks" name="thanks">Thanks</a></h2>
 <p>I have to thank Leszek Lesner for providing his MIT licensed code for <a href="http://www.zevenos.com/about/yavtd">YAVTD</a> which provided ideas and some lines of code for UberTuber.<br />
 Also thanks to Duggan from the haiku-3rdparty IRC channel for hints and help to find crashing set-backs.<br />
-And finally thanks to the people providing the <a href="http://rg3.github.com/youtube-dl">youtube-dl script.
-</p>
+And finally thanks to the people providing the <a href="http://rg3.github.com/youtube-dl">youtube-dl</a> script.</p>
+<p>If you kinda like UberTuber &ndash; or even more so if you don't &ndash; consider a <a href="http://www.haiku-inc.org/donations.html#online">donation to Haiku Inc.</a> or even better small monthly donations. This will accelerate  Haiku development and may even help getting video playback into WebPositive, so UberTuber can eventually retire.</p>
 
 <h2>
 <a href="#"><img src="images/up.png" style="border:none;float:right" alt="index" /></a>
