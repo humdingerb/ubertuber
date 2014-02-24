@@ -67,7 +67,7 @@ private:
 		bool			GetClip();
 		void			GetTitle();
 		BString			GetClipboard();
-		void			KillThread();
+		void			KillThread(char* command);
 		void			ResetFlags();
 		void			SetStatus(char* text);
 		void			TruncateTitle();

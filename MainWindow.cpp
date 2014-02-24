@@ -438,8 +438,9 @@ MainWindow::MessageReceived(BMessage* msg)
 		}
 		case msgABORT:
 		{
-			KillThread();
-
+			KillThread("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
+			KillThread("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit");
+						
 			SetStatus("Aborted");
 			printf("Download aborted\n");
 
@@ -500,6 +501,9 @@ MainWindow::MessageReceived(BMessage* msg)
 		{
 			if (msg->FindString("title", &fClipTitle) == B_OK)
 				TruncateTitle();
+			if (fClipTitle.FindFirst("ERROR: YouTube said:") == 0) {
+				PostMessage(msgABORT);
+			}
 			break;
 		}
 		case msgCLEARURL:
@@ -561,7 +565,8 @@ MainWindow::MessageReceived(BMessage* msg)
 			if (fGetFlag && !fSaveIt) {
 				SetStatus("Aborted");
 				fAbortedFlag = true;
-				KillThread();
+				KillThread("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
+				KillThread("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit");
 			}
 			if (fAbortedFlag) {
 				SetStatus("Aborted");
@@ -614,7 +619,8 @@ MainWindow::QuitRequested()
 		{
 			case 0:	// abort
 			{
-				KillThread();
+				KillThread("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
+				KillThread("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit");
 				break;
 			}
 			case 1:	// continue
@@ -689,14 +695,12 @@ MainWindow::URLofFile(entry_ref &ref)
 
 
 void
-MainWindow::KillThread()
+MainWindow::KillThread(char* command)
 {
-	BString command("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
-
 	char output[6];
-	FILE* pget_threadID;
+	FILE* pget_threadID(NULL);
 
-	pget_threadID = popen(command.String(),"r");
+	pget_threadID = popen(command,"r");
 	fread(output, 1, sizeof(output), pget_threadID);
 	fclose(pget_threadID);
 
@@ -803,6 +807,7 @@ MainWindow::PlayClip()
 {
 	BString* command = new BString(
 	"hey application/x-vnd.UberTuber buff ; "
+	"mkdir -p %DIR% ; "
 	"cd %DIR% ; "
 	"FILE=$(youtube-dl --restrict-filenames --get-filename %URL% 2>&1 | tail -n 1) ; "
 	"until [ -e \"$FILE\" ] ; do " // wait until file exists
