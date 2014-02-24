@@ -123,7 +123,7 @@ App::ReadyToRun()
 void
 App::AboutRequested()
 {
-	BAlert* alert = new BAlert("about", "UberTuber   v0.9.A\n"
+	BAlert* alert = new BAlert("about", "UberTuber   v0.9.10\n"
 		"\twritten by Humdinger\n"
 		"\tbased on ideas of Leszek's YAVTD\n"
 		"\tCopyright 2011-2014\n\n"
