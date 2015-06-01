@@ -1,0 +1,34 @@
+1	English	application/x-vnd.UberTuber	274134764
+About UberTuber	MainWindow		About UberTuber
+Download finished	MainWindow		Download finished
+Buffering…	MainWindow		Buffering…
+Aborted	MainWindow		Aborted
+URL:	MainWindow		URL:
+UberTuber	System name		UberTuber
+Auto-inserted URL	MainWindow		Auto-inserted URL
+Downloading…	MainWindow		Downloading…
+Continue download	MainWindow		Continue download
+File	MainWindow		File
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber can be launched with either a URL or a Web+ Bookmark file.\n
+Choose destination folder	MainWindow		Choose destination folder
+Abort download?	MainWindow		Abort download?
+Auto-play	MainWindow		Auto-play
+Play	MainWindow		Play
+Quit	MainWindow		Quit
+Clear URL field	MainWindow		Clear URL field
+Playback finished	MainWindow		Playback finished
+Open URL in browser	MainWindow		Open URL in browser
+Remove temporary files on quit	MainWindow		Remove temporary files on quit
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n
+Abort download	MainWindow		Abort download
+Edit monitored URLs…	MainWindow		Edit monitored URLs…
+Download failed	MainWindow		Download failed
+No URL found	MainWindow		No URL found
+Playing…	MainWindow		Playing…
+URL	MainWindow		URL
+Saving complete	MainWindow		Saving complete
+Thank you	App		Thank you
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		A clip is still being downloaded.\nDo you want to abort or continue the download?
+Select this folder	MainWindow		Select this folder
+Settings	MainWindow		Settings
+Save as…	MainWindow		Save as…

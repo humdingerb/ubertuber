@@ -1,0 +1,34 @@
+1	Polish	application/x-vnd.UberTuber	274134764
+About UberTuber	MainWindow		O UberTuberze
+Download finished	MainWindow		Pobieranie zakończone
+Buffering…	MainWindow		Buforowanie…
+Aborted	MainWindow		Przerwane
+URL:	MainWindow		Adres:
+UberTuber	System name		UberTuber
+Auto-inserted URL	MainWindow		Adres wstawiony automatycznie
+Downloading…	MainWindow		Pobieranie…
+Continue download	MainWindow		Kontynuuj pobieranie
+File	MainWindow		Plik
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber może być uruchomiony za pomocą adresu URL lub zakładki Web+.\n
+Choose destination folder	MainWindow		Wybierz katalog docelowy
+Abort download?	MainWindow		Przerwać pobieranie?
+Auto-play	MainWindow		Autoodtwarzanie
+Play	MainWindow		Odtwórz
+Quit	MainWindow		Zakończ
+Clear URL field	MainWindow		Wyczyść pole adresu
+Playback finished	MainWindow		Odtwarzanie zakończone
+Open URL in browser	MainWindow		Otwórz adres w przeglądarce
+Remove temporary files on quit	MainWindow		Usuń pliki tymczasowe po zakończeniu
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tnapisane przez Humdingera\n\toparte na pomysłach Leszka YAVTD\n\tCopyright 2011-2015\n\nUberTuber używa skryptu do pobierania filmów z YouTube’a.\nKlipy mogą zostać zapisane lub odtworzone bezpośrednio. UberTuber monitoruje schowek systemowy w celu przechwytywania adresów oraz posiada opcję autoodtwarzania, która odtworzy plik natychmiast po wykryciu kompatybilnego adresu.\n
+Abort download	MainWindow		Przerwij pobieranie
+Edit monitored URLs…	MainWindow		Edytuj kompatybilne adresy…
+Download failed	MainWindow		Pobieranie nieudane
+No URL found	MainWindow		Nie znaleziono adresu
+Playing…	MainWindow		Odtwarzanie…
+URL	MainWindow		Adres
+Saving complete	MainWindow		Zapisywanie zakończone
+Thank you	App		Dziękuję
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Klip nadal jest pobierany.\nChcesz przerwać czy kontynuować pobieranie?
+Select this folder	MainWindow		Wybierz ten katalog
+Settings	MainWindow		Ustawienia
+Save as…	MainWindow		Zapisz jako…

@@ -9,7 +9,7 @@ resource file_types message {
 resource app_version {
 	major  = 0,
 	middle = 9,
-	minor  = 10,
+	minor  = 11,
 
 	/* 0 = development	1 = alpha			2 = beta
 	   3 = gamma		4 = golden master	5 = final */
@@ -17,7 +17,7 @@ resource app_version {
 
 	internal = 0,
 
-	short_info = "YouTube video downloader",
+	short_info = "Webvideo player/downloader",
 	long_info  = "A tool to view videos from sites like youtube."
 };
 

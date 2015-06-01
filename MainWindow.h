@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2014. All rights reserved.
+ * Copyright 2011-2015. All rights reserved.
  * Distributed under the terms of the MIT license.
  *
  * Author:
@@ -69,7 +69,7 @@ private:
 		BString			GetClipboard();
 		void			KillThread(char* command);
 		void			ResetFlags();
-		void			SetStatus(char* text);
+		void			SetStatus(BString text);
 		void			TruncateTitle();
 		void			URLofFile(entry_ref &ref);
 

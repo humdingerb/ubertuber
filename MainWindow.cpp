@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2014. All rights reserved.
+ * Copyright 2011-2015. All rights reserved.
  * Distributed under the terms of the MIT license.
  *
  * Author:
@@ -14,6 +14,7 @@
 
 #include <Alert.h>
 #include <Application.h>
+#include <Catalog.h>
 #include <Clipboard.h>
 #include <ControlLook.h>
 #include <Directory.h>
@@ -34,6 +35,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#undef B_TRANSLATION_CONTEXT
+#define B_TRANSLATION_CONTEXT "MainWindow"
 
 int32
 _call_script(void* arg)
@@ -65,7 +68,7 @@ public:
 
 MainWindow::MainWindow()
 	:
-	BWindow(BRect(), "UberTuber", B_TITLED_WINDOW,
+	BWindow(BRect(), B_TRANSLATE_SYSTEM_NAME("UberTuber"), B_TITLED_WINDOW,
 		B_NOT_V_RESIZABLE | B_NOT_ZOOMABLE | B_ASYNCHRONOUS_CONTROLS |
 		B_QUIT_ON_WINDOW_CLOSE | B_AUTO_UPDATE_SIZE_LIMITS),
 	fSaveFilePanel(NULL),
@@ -113,45 +116,45 @@ MainWindow::_BuildMenu()
 
 	fMenuBar = new BMenuBar(BRect(), "menubar");
 
-	menu = new BMenu("File");
-	menu->AddItem(fPlayMenu = new BMenuItem("Play", new BMessage(msgPLAY), 'P'));
+	menu = new BMenu(B_TRANSLATE("File"));
+	menu->AddItem(fPlayMenu = new BMenuItem(B_TRANSLATE("Play"), new BMessage(msgPLAY), 'P'));
 	fPlayMenu->SetEnabled(false);
-	menu->AddItem(fSaveMenu = new BMenuItem("Save as" B_UTF8_ELLIPSIS,
+	menu->AddItem(fSaveMenu = new BMenuItem(B_TRANSLATE("Save as" B_UTF8_ELLIPSIS),
 		new BMessage(msgSAVE), 'S'));
 	fSaveMenu->SetEnabled(false);
 
-	menu->AddItem(fAbortMenu = new BMenuItem("Abort download",
+	menu->AddItem(fAbortMenu = new BMenuItem(B_TRANSLATE("Abort download"),
 		new BMessage(msgABORT)));
 	fAbortMenu->SetEnabled(false);
 
 	menu->AddSeparatorItem();
-	menu->AddItem(item = new BMenuItem("About UberTuber",
+	menu->AddItem(item = new BMenuItem(B_TRANSLATE("About UberTuber"),
 		new BMessage(B_ABOUT_REQUESTED)));
 	item->SetTarget(be_app);
 	menu->AddSeparatorItem();
-	menu->AddItem(item = new BMenuItem("Quit", new BMessage(B_QUIT_REQUESTED),
+	menu->AddItem(item = new BMenuItem(B_TRANSLATE("Quit"), new BMessage(B_QUIT_REQUESTED),
 		'Q'));
 	fMenuBar->AddItem(menu);
 	
-	menu = new BMenu("URL");
-	menu->AddItem(item = fClearURLMenu = new BMenuItem("Clear URL field",
+	menu = new BMenu(B_TRANSLATE("URL"));
+	menu->AddItem(item = fClearURLMenu = new BMenuItem(B_TRANSLATE("Clear URL field"),
 		new BMessage(msgCLEARURL), 'D'));
 	fClearURLMenu->SetEnabled(false);
-	menu->AddItem(item = fOpenURLMenu = new BMenuItem("Open URL in browser",
+	menu->AddItem(item = fOpenURLMenu = new BMenuItem(B_TRANSLATE("Open URL in browser"),
 		new BMessage(msgOPENURL), 'O'));
 	fOpenURLMenu->SetEnabled(false);
 	fMenuBar->AddItem(menu);
 
-	menu = new BMenu("Settings");
-	menu->AddItem(item = fAutoMenu = new BMenuItem("Auto-play",
+	menu = new BMenu(B_TRANSLATE("Settings"));
+	menu->AddItem(item = fAutoMenu = new BMenuItem(B_TRANSLATE("Auto-play"),
 		new BMessage(msgAUTO)));
 	item->SetMarked(fSettings.StateAuto());
 	menu->AddItem(item = fCleanMenu = new BMenuItem(
-		"Remove temporary files on quit", new BMessage(msgCLEAN)));
+		B_TRANSLATE("Remove temporary files on quit"), new BMessage(msgCLEAN)));
 	item->SetMarked(fSettings.StateClear());
 	menu->AddSeparatorItem();
 	menu->AddItem(item = new BMenuItem(
-		"Edit monitored websites" B_UTF8_ELLIPSIS, new BMessage(msgEDIT)));
+		B_TRANSLATE("Edit monitored URLs" B_UTF8_ELLIPSIS), new BMessage(msgEDIT)));
 	fMenuBar->AddItem(menu);
 }
 
@@ -159,7 +162,7 @@ MainWindow::_BuildMenu()
 void
 MainWindow::_BuildLayout()
 {
-	fURLBox = new BTextControl("urlbox", "URL:", " ", NULL);
+	fURLBox = new BTextControl("urlbox", B_TRANSLATE("URL:"), " ", NULL);
 	fURLBox->SetModificationMessage(new BMessage(msgURL));
 
 	fTitleView = new BStringView("title", " ");
@@ -170,14 +173,14 @@ MainWindow::_BuildLayout()
 	fStatusView->SetFontSize(be_plain_font->Size() - 2);
 	fStatusView->SetHighColor(tint_color(ui_color(B_CONTROL_TEXT_COLOR), 0.7));
 
-	fAbortButton = new BButton("abortbutton", "Abort download",
+	fAbortButton = new BButton("abortbutton", B_TRANSLATE("Abort download"),
 		new BMessage(msgABORT));
 	fAbortButton->SetEnabled(false);
 
-	fPlayButton = new BButton("playbutton", "Play", new BMessage(msgPLAY));
+	fPlayButton = new BButton("playbutton", B_TRANSLATE("Play"), new BMessage(msgPLAY));
 	fPlayButton->SetEnabled(false);
 
-	fSaveButton = new BButton("savebutton", "Save as" B_UTF8_ELLIPSIS,
+	fSaveButton = new BButton("savebutton", B_TRANSLATE("Save as" B_UTF8_ELLIPSIS),
 		new BMessage(msgSAVE));
 	fSaveButton->SetEnabled(false);
 
@@ -290,7 +293,7 @@ MainWindow::MessageReceived(BMessage* msg)
 				if (fSettings.StateAuto())
 					PostMessage(msgPLAY);
 			}
-			SetStatus("Auto-inserted URL");
+			SetStatus(B_TRANSLATE("Auto-inserted URL"));
 			break;
 		}
 		
@@ -312,13 +315,13 @@ MainWindow::MessageReceived(BMessage* msg)
 				fSaveFilePanel->SetTarget(this);
 
 				fSaveFilePanel->Window()->Lock();
-				fSaveFilePanel->Window()->SetTitle("Choose destination folder");
+				fSaveFilePanel->Window()->SetTitle(B_TRANSLATE("Choose destination folder"));
 				BRect buttonRect
 					= fSaveFilePanel->Window()->ChildAt(0)->FindView(
 						"cancel button")->Frame();
 				buttonRect.right  = buttonRect.left - 20;
 				buttonRect.left = buttonRect.right - 130;
-				selectThisDir = new BButton(buttonRect, NULL, "Select this folder",
+				selectThisDir = new BButton(buttonRect, NULL, B_TRANSLATE("Select this folder"),
 					new BMessage(SELECT_THIS_DIR_MESSAGE),
 					B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT);
 				selectThisDir->SetTarget(this);
@@ -522,20 +525,20 @@ MainWindow::MessageReceived(BMessage* msg)
 		// React to messages from 'hey', forwarded from App
 		case statBUFFER:
 		{
-			SetStatus("Buffering...");
+			SetStatus(B_TRANSLATE("Buffering" B_UTF8_ELLIPSIS));
 			break;
 		}
 		case statDOWNLOAD:
 		{
-			SetStatus("Downloading...");
+			SetStatus(B_TRANSLATE("Downloading" B_UTF8_ELLIPSIS));
 			break;
 		}
 		case statERROR:
 		{
 			if (!fAbortedFlag)
-				SetStatus("Download failed");
+				SetStatus(B_TRANSLATE("Download failed"));
 			else {
-				SetStatus("Aborted");
+				SetStatus(B_TRANSLATE("Aborted"));
 				fAbortMenu->SetEnabled(false);
 				fAbortButton->SetEnabled(false);
 			}
@@ -546,7 +549,7 @@ MainWindow::MessageReceived(BMessage* msg)
 		case statFINISH_GET:
 		{
 			if (!fPlayingFlag && !fAbortedFlag)
-				SetStatus("Download finished");
+				SetStatus(B_TRANSLATE("Download finished"));
 			fAbortButton->SetEnabled(false);
 			fAbortMenu->SetEnabled(false);
 			fGetFlag = false;
@@ -559,17 +562,17 @@ MainWindow::MessageReceived(BMessage* msg)
 		case statFINISH_PLAY:
 		{
 			if (!fGetFlag)
-				SetStatus("Playback finished");
+				SetStatus(B_TRANSLATE("Playback finished"));
 			if (fGetFlag && fSaveIt)
-				SetStatus("Downloading...");
+				SetStatus(B_TRANSLATE("Downloading" B_UTF8_ELLIPSIS));
 			if (fGetFlag && !fSaveIt) {
-				SetStatus("Aborted");
+				SetStatus(B_TRANSLATE("Aborted"));
 				fAbortedFlag = true;
 				KillThread("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
 				KillThread("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit");
 			}
 			if (fAbortedFlag) {
-				SetStatus("Aborted");
+				SetStatus(B_TRANSLATE("Aborted"));
 				fGotClipFlag = false;
 			}
 			if (fGotClipFlag)
@@ -582,7 +585,7 @@ MainWindow::MessageReceived(BMessage* msg)
 		}
 		case statFINISH_SAVE:
 		{
-			SetStatus("Saving complete");
+			SetStatus(B_TRANSLATE("Saving complete"));
 			fSaveButton->SetEnabled(true);
 			fSaveMenu->SetEnabled(true);
 			fSavedFlag = true;
@@ -593,7 +596,7 @@ MainWindow::MessageReceived(BMessage* msg)
 			fPlayingFlag = true;
 			fAbortButton->SetEnabled(true);
 			fAbortMenu->SetEnabled(true);
-			SetStatus("Playing...");
+			SetStatus(B_TRANSLATE("Playing" B_UTF8_ELLIPSIS));
 			break;
 		}
 		default:
@@ -609,9 +612,9 @@ bool
 MainWindow::QuitRequested()
 {
 	if (fGetFlag) {
-		BAlert* alert = new BAlert("Abort download?", "A clip is still being"
-			"downloaded.\nDo you want to abort or continue the download?",
-			"Abort download", "Continue download", NULL, B_WIDTH_FROM_LABEL,
+		BAlert* alert = new BAlert(B_TRANSLATE("Abort download?"), B_TRANSLATE("A clip is still being "
+			"downloaded.\nDo you want to abort or continue the download?"),
+			B_TRANSLATE("Abort download"), B_TRANSLATE("Continue download"), NULL, B_WIDTH_FROM_LABEL,
 			B_OFFSET_SPACING, B_WARNING_ALERT);
 		alert->SetShortcut(1, B_ESCAPE);
 
@@ -672,7 +675,7 @@ MainWindow::URLofFile(entry_ref &ref)
 
 	readBytes = node.ReadAttr("META:url", B_STRING_TYPE, 0, buffer, bufferSize);
 	if (readBytes < 1)
-		SetStatus("No URL found");
+		SetStatus(B_TRANSLATE("No URL found"));
 	else {
 		fURLBox->SetText(buffer);
 		if (!fGetFlag) {
@@ -734,9 +737,9 @@ MainWindow::ResetFlags()
 
 
 void
-MainWindow::SetStatus(char* text)
+MainWindow::SetStatus(BString text)
 {
-	fStatusView->SetText(text);
+	fStatusView->SetText(text.String());
 	return;
 }
 

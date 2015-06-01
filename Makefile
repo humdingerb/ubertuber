@@ -1,10 +1,12 @@
 NAME= UberTuber
 TYPE= APP
+APP_MIME_SIG= application/x-vnd.UberTuber
 SRCS= App.cpp MainWindow.cpp Settings.cpp WorkerThread.cpp
 RDEFS= UberTuber.rdef
-LIBS= be tracker $(STDCPPLIBS)
+LIBS= be localestub tracker $(STDCPPLIBS)
 LIBPATHS=
 SYSTEM_INCLUDE_PATHS=
+LOCALES= en de pl
 LOCAL_INCLUDE_PATHS=
 OPTIMIZE=FULL
 #	specify any preprocessor symbols to be defined.  The symbols will not

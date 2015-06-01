@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2013. All rights reserved.
+ * Copyright 2011-2015. All rights reserved.
  * Distributed under the terms of the MIT license.
  *
  * Author:
@@ -10,9 +10,12 @@
 #include "MainWindow.h"
 
 #include <Alert.h>
+#include <Catalog.h>
 #include <Font.h>
 #include <TextView.h>
 
+#undef B_TRANSLATION_CONTEXT
+#define B_TRANSLATION_CONTEXT "App"
 
 extern const char *kApplicationSignature = "application/x-vnd.UberTuber";
 
@@ -40,8 +43,8 @@ App::ArgvReceived(int32 argc, char** argv)
 {
 	if (strcmp(argv[1], "--help") == 0
 		|| strcmp(argv[1], "-h") == 0) {
-		printf("UberTuber can be launched with either a URL or a "
-			"Web+ Bookmark file.\n");
+		printf(B_TRANSLATE("UberTuber can be launched with either a URL or a "
+			"Web+ Bookmark file.\n"));
 		PostMessage(B_QUIT_REQUESTED);
 		return;
 	}
@@ -123,15 +126,15 @@ App::ReadyToRun()
 void
 App::AboutRequested()
 {
-	BAlert* alert = new BAlert("about", "UberTuber   v0.9.10\n"
+	BAlert* alert = new BAlert("about", B_TRANSLATE("UberTuber v0.9.11\n"
 		"\twritten by Humdinger\n"
 		"\tbased on ideas of Leszek's YAVTD\n"
-		"\tCopyright 2011-2014\n\n"
+		"\tCopyright 2011-2015\n\n"
 		"UberTuber uses a script to download YouTube videos.\n"
 		"Clips can be saved or played back directly. UberTuber monitors "
 		"the system clipboard for newly copied URLs and has an 'Auto-play' "
-		"option that'll start playback as soon as a supported URL is detected.\n",
-		"Thank you");
+		"option that'll start playback as soon as a supported URL is detected.\n"),
+		B_TRANSLATE("Thank you"));
 	BTextView* view = alert->TextView();
 	BFont font;
 
