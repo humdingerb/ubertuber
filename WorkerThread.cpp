@@ -77,7 +77,7 @@ WorkerThread::_GetClip(BString url)
 	"mkdir -p /tmp/ubertuber ; "
 	"cd /tmp/ubertuber ; "
 	"hey application/x-vnd.UberTuber down ; "
-	"youtube-dl --max-quality=22 --continue --restrict-filenames --no-part --no-cache-dir %URL% ; "
+	"youtube-dl --continue --restrict-filenames --no-part --no-cache-dir --format best %URL% ; "
 	"while [ -n \"$(%TEST%)\" ] ; do " // wait for script to finish/aborted
 	"sleep 2 ; "
 	"done ; "
@@ -89,7 +89,7 @@ WorkerThread::_GetClip(BString url)
 	"fi ; "
 	"exit");
 
-	BString threadtest("ps | grep python | grep \"youtube-dl --max\"");
+	BString threadtest("ps | grep python | grep \"youtube-dl --con\"");
 
 	command->ReplaceAll("%TEST%", threadtest.String());
 	command->ReplaceAll("%URL%", url.String());

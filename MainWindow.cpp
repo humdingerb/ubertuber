@@ -444,7 +444,7 @@ MainWindow::MessageReceived(BMessage* msg)
 			KillThread("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
 			KillThread("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit");
 						
-			SetStatus("Aborted");
+			SetStatus(B_TRANSLATE("Aborted"));
 			printf("Download aborted\n");
 
 			fAbortMenu->SetEnabled(false);
