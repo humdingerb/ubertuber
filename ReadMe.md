@@ -10,9 +10,9 @@ UberTuber monitors the system clipboard for URLs pointing to the supported websi
 
 If the playback of a clip from a particular website works, depends on the underlying `youtube-dl` script, which gets updated from time to time. At this moment there is support for clips from:
 ```
-_YouTube, Google video, MetaCafe, DailyMotion, Yahoo video,  
+YouTube, Google video, MetaCafe, DailyMotion, Yahoo video,  
  Photobucket, DepositFiles, Vimeo.com, blip.tv, Facebook video,  
- Escapist magazine, and many many more sites..._
+ Escapist magazine, and many many more sites...
 ```
 
 Youtube-dl's website has a list of [reportedly working sites](http://rg3.github.io/youtube-dl/supportedsites.html).
