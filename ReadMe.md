@@ -21,7 +21,7 @@ Youtube-dl's website has a list of [reportedly working sites](http://rg3.github.
 
 There are only very few user settings:
 
-![UberTuber window](https://dl.dropboxusercontent.com/u/21023348/images/ubertuber.jpg)
+![UberTuber window](./images/ubertuber.jpg)
 
 *   **Auto-play**  
      This starts playback automatically, if a valid URL is detected in the clipboard. Convenient if you run UberTuber in the background while surfing the web: just copy the link to a clip in the browser and a few seconds later your media player starts playing it back.
