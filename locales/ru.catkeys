@@ -1,0 +1,35 @@
+1	English	application/x-vnd.UberTuber	274134764
+About UberTuber	MainWindow		Об UberTuber
+Download finished	MainWindow		Скачивание завершено
+Buffering…	MainWindow		Буферизация…
+Aborted	MainWindow		Прервано
+URL:	MainWindow		Ссылка:
+UberTuber	System name		UberTuber
+Auto-inserted URL	MainWindow		Автоматически вставленная ссылка
+Downloading…	MainWindow		Скачивание…
+Continue download	MainWindow		Продолжить скачивание
+File	MainWindow		Файл
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber может быть запущен либо посредством ссылки, либо закладки Web+.\n
+Choose destination folder	MainWindow		Выберите целевую папку
+Abort download?	MainWindow		Прервать скачивание?
+Auto-play	MainWindow		Автоматическое проигрывание
+Play	MainWindow		Проиграть
+Quit	MainWindow		Выход
+Clear URL field	MainWindow		Очистить поле 'Ссылка'
+Playback finished	MainWindow		Проигрывание завершено
+Open URL in browser	MainWindow		Открыть ссылку в браузере
+Remove temporary files on quit	MainWindow		Удалять временные файлы при выходе
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tразработан Humdinger\n\tоснован на идеях Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber использует скрипт для скачивания видео с YouTube.\nРолики могут быть сохранены или проиграны напрямую. UberTuber следит за появлением новых ссылок в буфере обмена и обладает функцией авто-проигрывания, которая запускает воспроизведение, как только распознана поддерживаемая ссылка.\n
+Abort download	MainWindow		Прервать скачивание
+Edit monitored URLs…	MainWindow		Редактировать наблюдаемые ссылки
+Download failed	MainWindow		Ошибка скачивания
+No URL found	MainWindow		Ссылка не найдена
+Playing…	MainWindow		Проигрывание…
+URL	MainWindow		Ссылка
+Saving complete	MainWindow		Сохранение завершено
+Thank you	App		Спасибо
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Ролик все еще скачивается.\nВы хотите прервать процесс или продолжить скачивание?
+Select this folder	MainWindow		Выбрать эту папку
+Settings	MainWindow		Настройки
+Save as…	MainWindow		Сохранить как…
+ак…
