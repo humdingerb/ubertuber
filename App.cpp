@@ -17,7 +17,7 @@
 #undef B_TRANSLATION_CONTEXT
 #define B_TRANSLATION_CONTEXT "App"
 
-extern const char *kApplicationSignature = "application/x-vnd.UberTuber";
+extern const char *kApplicationSignature = "application/x-vnd.humdinger-ubertuber";
 
 
 App::App()

@@ -135,7 +135,7 @@ MainWindow::_BuildMenu()
 	menu->AddItem(item = new BMenuItem(B_TRANSLATE("Quit"), new BMessage(B_QUIT_REQUESTED),
 		'Q'));
 	fMenuBar->AddItem(menu);
-	
+
 	menu = new BMenu(B_TRANSLATE("URL"));
 	menu->AddItem(item = fClearURLMenu = new BMenuItem(B_TRANSLATE("Clear URL field"),
 		new BMessage(msgCLEARURL), 'D'));
@@ -221,9 +221,9 @@ status_t
 MainWindow::WatchMonitoredSitesList()
 {
 	BPath path;
-	if (find_directory(B_USER_SETTINGS_DIRECTORY, &path) != B_OK) 
+	if (find_directory(B_USER_SETTINGS_DIRECTORY, &path) != B_OK)
 		return false;
-		
+
 	path.Append(kMonitorFile);
 	BEntry* entry = new BEntry(path.Path());
 
@@ -244,10 +244,10 @@ MainWindow::MessageReceived(BMessage* msg)
 		}
 		return;
 	}
-	
+
 	entry_ref inRef;
 	BEntry inEntry;
-	
+
 	switch (msg->what)
 	{
 		case B_NODE_MONITOR:
@@ -281,7 +281,7 @@ MainWindow::MessageReceived(BMessage* msg)
 			}
 
 			fURLBox->SetText(clipboardString.String());
-			
+
 			if (!fGetFlag) {
 				fPlayButton->SetEnabled(true);
 				fSaveButton->SetEnabled(true);
@@ -296,7 +296,7 @@ MainWindow::MessageReceived(BMessage* msg)
 			SetStatus(B_TRANSLATE("Auto-inserted URL"));
 			break;
 		}
-		
+
 		case msgSAVE:
 		{
 			// Execute Save Panel
@@ -308,7 +308,7 @@ MainWindow::MessageReceived(BMessage* msg)
 				entry_ref destRef;
 				if (entry.Exists() && entry.IsDirectory())
 					entry.GetRef(&destRef);
-		
+
 				fSaveFilePanel = new BFilePanel(B_OPEN_PANEL, NULL, &destRef,
 					B_DIRECTORY_NODE, true, &folderSelect, NULL, false, true);
 				fSaveFilePanel->SetButtonLabel(B_DEFAULT_BUTTON, "Select");
@@ -443,7 +443,7 @@ MainWindow::MessageReceived(BMessage* msg)
 		{
 			KillThread("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
 			KillThread("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit");
-						
+
 			SetStatus(B_TRANSLATE("Aborted"));
 			printf("Download aborted\n");
 
@@ -462,7 +462,7 @@ MainWindow::MessageReceived(BMessage* msg)
 		case msgPLAY:
 		{
 			fURL = new BString(fURLBox->Text());
-			
+
 			if (!fGetFlag && !fGotClipFlag)
 				GetClip();
 
@@ -490,7 +490,7 @@ MainWindow::MessageReceived(BMessage* msg)
 				fPlayMenu->SetEnabled(state);
 				fSaveMenu->SetEnabled(state);
 				fClearURLMenu->SetEnabled(state);
-				fOpenURLMenu->SetEnabled(state);				
+				fOpenURLMenu->SetEnabled(state);
 
 				SetStatus("");
 				fTitleView->SetText("");
@@ -580,7 +580,7 @@ MainWindow::MessageReceived(BMessage* msg)
 
 			fPlayingFlag = false;
 			fPlayButton->SetEnabled(true);
-			fPlayMenu->SetEnabled(true);		
+			fPlayMenu->SetEnabled(true);
 			break;
 		}
 		case statFINISH_SAVE:
@@ -661,7 +661,7 @@ MainWindow::TruncateTitle()
 	BString* title = new BString(fClipTitle);
 	fTitleView->TruncateString(title, B_TRUNCATE_END, widthURL - 120.0);
 	fTitleView->SetText(title->String());
-	
+
 	return;
 }
 
@@ -683,9 +683,9 @@ MainWindow::URLofFile(entry_ref &ref)
 			fSaveButton->SetEnabled(true);
 			fPlayMenu->SetEnabled(true);
 			fSaveMenu->SetEnabled(true);
-	
+
 			ResetFlags();
-	
+
 			if (fSettings.StateAuto())
 				PostMessage(msgPLAY);
 		}
@@ -712,12 +712,12 @@ MainWindow::KillThread(char* command)
 		if (output[i] == '\n' || output[i] == '\r')
 			output[i] = '\0';
 	}
-	
+
 	printf("Kill, Kill, Kill!\nThreadID: %s\n", output);
 
 	int ID(atoi(output));
-	kill_thread((thread_id) ID);	
-	
+	kill_thread((thread_id) ID);
+
 	return;
 }
 
@@ -790,7 +790,7 @@ MainWindow::GetClip()
 		return true;
 
 	GetTitle();
-	
+
 	BMessage msg(msgGETCLIP);
 	msg.AddString("url", fURL->String());
 	fWorkerThread->Looper()->PostMessage(&msg, fWorkerThread);
@@ -828,7 +828,7 @@ MainWindow::PlayClip()
 	"exit");
 
 	command->ReplaceAll("%URL%", fURL->String());
-	
+
 	if (fSavedFlag)
 		command->ReplaceAll("%DIR%", fSaveDir->String());
 	else
@@ -866,7 +866,7 @@ MainWindow::SaveClip()
 		return;
 
 	resume_thread(savethread);
-	
+
 	return;
 }
 
