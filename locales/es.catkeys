@@ -1,0 +1,34 @@
+1	Spanish	application/x-vnd.humdinger-ubertuber	274134764
+About UberTuber	MainWindow		Acerca de UberTuber
+Download finished	MainWindow		Descarga finalizada
+Buffering…	MainWindow		Buffering…
+Aborted	MainWindow		Cancelado
+URL:	MainWindow		URL:
+UberTuber	System name		UberTuber
+Auto-inserted URL	MainWindow		URL insertada automáticamente
+Downloading…	MainWindow		Descargando…
+Continue download	MainWindow		Continuar descarga
+File	MainWindow		Archivo
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber puede ser iniciado ya sea con una URL o un Marcador de Web+.\n
+Choose destination folder	MainWindow		Elija la carpeta de destino
+Abort download?	MainWindow		¿Cancela descarga?
+Auto-play	MainWindow		Reproducción automática
+Play	MainWindow		Reproducir
+Quit	MainWindow		Salir
+Clear URL field	MainWindow		Limpiar campo URL
+Playback finished	MainWindow		Reproducción finalizada
+Open URL in browser	MainWindow		Abrir URL en navegador
+Remove temporary files on quit	MainWindow		Eliminar archivos temporales al salir
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\escrito por  Humdinger\n\tbasado en ideas de Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber utiliza un script para descargar videos de YouTube.\nLos videos pueden ser guardados o reproducidos directamente. UberTuber monitorea el portapapeles del sistema para detectar URLs que hayan sido copiadas recientemente y posee una opción de 'Reproducción automática' que inicia la reproducción tan pronto como detecta una URL soportada.\n
+Abort download	MainWindow		Cancelar descarga
+Edit monitored URLs…	MainWindow		Editar URLs monitoreadas...
+Download failed	MainWindow		Descarga fallida
+No URL found	MainWindow		URL no encontrada
+Playing…	MainWindow		Reproduciendo...
+URL	MainWindow		URL
+Saving complete	MainWindow		Guardado completado
+Thank you	App		Gracias
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Un video todavía está siendo descargado.\nDesea cancelar o continuar la descarga?
+Select this folder	MainWindow		Seleccionar esta carpeta
+Settings	MainWindow		Configuración
+Save as…	MainWindow		Guardar como…
