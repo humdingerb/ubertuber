@@ -1,0 +1,34 @@
+1	Ukrainian	application/x-vnd.UberTuber	274134764
+About UberTuber	MainWindow		Про UberTuber
+Download finished	MainWindow		Завантаження завершене
+Buffering…	MainWindow		Буферизація…
+Aborted	MainWindow		Перервано
+URL:	MainWindow		URL:
+UberTuber	System name		UberTuber
+Auto-inserted URL	MainWindow		Автовставлене посилання
+Downloading…	MainWindow		Завантаження…
+Continue download	MainWindow		Продовжити завантаження
+File	MainWindow		Файл
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber може бути запущений за допомогою посилання або закладки Web+.\n
+Choose destination folder	MainWindow		Виберіть папку призначення
+Abort download?	MainWindow		Перервати завантаження?
+Auto-play	MainWindow		Автовідтворення
+Play	MainWindow		Відтворення
+Quit	MainWindow		Вийти
+Clear URL field	MainWindow		Очистити поле 'URL'
+Playback finished	MainWindow		Відтворення завершене
+Open URL in browser	MainWindow		Відкрити посилання в браузері
+Remove temporary files on quit	MainWindow		Видаляти тимчасові файли при виході
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tрозроблений Humdinger\n\tзаснований на ідеях Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber використовує скрипт для завантаження відео з YouTube.\nКліпи можуть бути збережені або програні безпосередньо. UberTuber стежить за появою нових посилань в буфері обміну і має функцію автовідтворення, що запускає програвання, як тільки розпізнане підтримуване посилання.\n
+Abort download	MainWindow		Перервати завантаження
+Edit monitored URLs…	MainWindow		Редагувати відстежувані посилання…
+Download failed	MainWindow		Помилка завантаження
+No URL found	MainWindow		Посилання не знайдене
+Playing…	MainWindow		Відтворення…
+URL	MainWindow		URL
+Saving complete	MainWindow		Збереження завершене
+Thank you	App		Дякуємо
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Кліп все ще завантажується.\nБажаєте перервати або продовжити завантаження?
+Select this folder	MainWindow		Вибрати цю папку
+Settings	MainWindow		Параметри
+Save as…	MainWindow		Зберегти як…

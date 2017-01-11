@@ -6,7 +6,7 @@ RDEFS= UberTuber.rdef
 LIBS= be localestub tracker $(STDCPPLIBS)
 LIBPATHS=
 SYSTEM_INCLUDE_PATHS=
-LOCALES= de en es pl
+LOCALES= de en es pl ru uk
 LOCAL_INCLUDE_PATHS=
 OPTIMIZE=FULL
 #	specify any preprocessor symbols to be defined.  The symbols will not
