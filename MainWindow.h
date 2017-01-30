@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2015. All rights reserved.
+ * Copyright 2011-2017. All rights reserved.
  * Distributed under the terms of the MIT license.
  *
  * Author:
@@ -25,6 +25,13 @@
 #include <StringView.h>
 #include <TextControl.h>
 #include <Window.h>
+
+enum {
+	msgGETCLIP	= 'gclp',
+	msgPLAYCLIP = 'plcl',
+	msgGETTITLE	= 'gtit',
+	msgTITLE	= 'titl'
+};
 
 enum {
 	statBUFFER			= 'buff',
@@ -62,6 +69,10 @@ public:
 private:
 		void			_BuildMenu();
 		void			_BuildLayout();
+		void			_GetTitleOutput(BMessage* message);
+		void			_GetClipOutput(BMessage* message);
+		void			_PlayClipOutput(BMessage* message);
+
 
 		status_t		WatchMonitoredSitesList();
 		bool			GetClip();
@@ -93,6 +104,7 @@ private:
 		BMenuItem*		fOpenURLMenu;
 
 		BString			fClipTitle;
+		BString			fClipPath;
 		BString*		fFilename;
 		BString*		fSaveDir;
 		BString*		fTempDir;
@@ -111,8 +123,10 @@ private:
 		bool			fSaveIt;
 
 		Settings		fSettings;
-		
-		WorkerThread*	fWorkerThread;
+
+		WorkerThread*	fGetTitleThread;
+		WorkerThread*	fGetClipThread;
+		WorkerThread*	fPlayThread;
 };
 
 #endif /* MAINWINDOW_H */

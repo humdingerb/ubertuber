@@ -72,14 +72,14 @@ MainWindow::MainWindow()
 		B_NOT_V_RESIZABLE | B_NOT_ZOOMABLE | B_ASYNCHRONOUS_CONTROLS |
 		B_QUIT_ON_WINDOW_CLOSE | B_AUTO_UPDATE_SIZE_LIMITS),
 	fSaveFilePanel(NULL),
+	fClipPath(NULL),
 	fAbortedFlag(false),
 	fGetFlag(false),
 	fGotClipFlag(false),
 	fPlayedFlag(false),
 	fPlayingFlag(false),
 	fSavedFlag(false),
-	fSaveIt(false),
-	fWorkerThread(new WorkerThread(this))
+	fSaveIt(false)
 {
 	_BuildMenu();
 	_BuildLayout();
@@ -599,11 +599,78 @@ MainWindow::MessageReceived(BMessage* msg)
 			SetStatus(B_TRANSLATE("Playing" B_UTF8_ELLIPSIS));
 			break;
 		}
+		// React to messages from the WorkerThreads
+		case msgGETTITLE:
+		{
+			_GetTitleOutput(msg);
+			break;
+		}
+		case msgGETCLIP:
+		{
+			_GetClipOutput(msg);
+			break;
+		}
+		case msgPLAYCLIP:
+		{
+			_PlayClipOutput(msg);
+			break;
+		}
 		default:
 		{
 			BWindow::MessageReceived(msg);
 			break;
 		}
+	}
+}
+
+
+void
+MainWindow::_GetTitleOutput(BMessage* message)
+{
+	BString data;
+
+	if (message->FindString("line", &data) == B_OK) {
+		printf("GetTitle - Title: %s\n", data.String());
+		SetStatus(data);
+	}
+}
+
+
+void
+MainWindow::_GetClipOutput(BMessage* message)
+{
+	BString data;
+
+	if (message->FindString("line", &data) == B_OK) {
+		if (data.FindFirst("ERROR: ") == 0) {
+			printf("GetClip - Failure: %s\n", data.String());
+			PostMessage(msgABORT);
+		} else if (data.FindFirst("[download] Destination: ") == 0)
+			fClipPath = data.ReplaceFirst("[download] Destination: ", "");
+	}
+	int32 code = -1;
+	if (message->FindInt32("thread_exit", &code) == B_OK) {
+		printf("GetClip - Download finished\n");
+		PostMessage(statFINISH_GET);
+	}
+}
+
+
+void
+MainWindow::_PlayClipOutput(BMessage* message)
+{
+	BString data;
+
+	if (message->FindString("line", &data) == B_OK) {
+		if (data.FindFirst("ERROR: ") == 0) {
+			printf("GetClip - Failure: %s\n", data.String());
+			PostMessage(msgABORT);
+		}
+	}
+	int32 code = -1;
+	if (message->FindInt32("thread_exit", &code) == B_OK) {
+		printf("GetClip - Download finished\n");
+		PostMessage(statFINISH_GET);
 	}
 }
 
@@ -641,7 +708,7 @@ MainWindow::QuitRequested()
 
 	}
 	fSettings.SetWindowPosition(ConvertToScreen(Bounds()));
-	fWorkerThread->PostMessage(B_QUIT_REQUESTED);
+//	fWorkerThread->PostMessage(B_QUIT_REQUESTED);
 	be_app->PostMessage(B_QUIT_REQUESTED);
 	return true;
 }
@@ -775,9 +842,14 @@ MainWindow::GetClipboard()
 void
 MainWindow::GetTitle()
 {
-	BMessage msg(msgGETTITLE);
-	msg.AddString("url", fURL->String());
-	fWorkerThread->Looper()->PostMessage(&msg, fWorkerThread);
+	fGetTitleThread = new WorkerThread(NULL,
+		new BInvoker(new BMessage(msgGETTITLE), this));
+
+	fGetTitleThread->AddArgument("youtube-dl")
+		->AddArgument("--get-title")
+		->AddArgument(fURL->String())
+		->AddArgument("2>&1 | tail -n 1")	// also get output from error out
+		->Run();
 
 	return;
 }
@@ -789,11 +861,19 @@ MainWindow::GetClip()
 	if (fSavedFlag || fPlayedFlag)
 		return true;
 
-	GetTitle();
+	fGetClipThread = new WorkerThread(NULL,
+		new BInvoker(new BMessage(msgGETCLIP), this));
 
-	BMessage msg(msgGETCLIP);
-	msg.AddString("url", fURL->String());
-	fWorkerThread->Looper()->PostMessage(&msg, fWorkerThread);
+	fGetClipThread->AddArgument("youtube-dl")
+		->AddArgument("youtube-dl")
+		->AddArgument("--continue")
+		->AddArgument("--restrict-filenames")
+		->AddArgument("--no-part")
+		->AddArgument("--no-cache-dir")
+		->AddArgument("--format best")
+		->AddArgument("--output '/tmp/ubertuber/%(title)s.%(ext)s'")
+		->AddArgument(fURL->String())
+		->Run();
 
 	fGetFlag = true;
 
@@ -808,38 +888,18 @@ MainWindow::GetClip()
 void
 MainWindow::PlayClip()
 {
-	BString* command = new BString(
-	"hey application/x-vnd.UberTuber buff ; "
-	"mkdir -p %DIR% ; "
-	"cd %DIR% ; "
-	"FILE=$(youtube-dl --restrict-filenames --get-filename %URL% 2>&1 | tail -n 1) ; "
-	"until [ -e \"$FILE\" ] ; do " // wait until file exists
-	"sleep 1 ; "
-	"done ; "
-	"sleep 2 ; "		// buffering a bit
-	"settype -t video/mpeg4 \"$FILE\" ; "		// Force MPEG4 for MediaPlayer"
-	"hey application/x-vnd.UberTuber play ; "
-	"open \"$FILE\" ; "
-	"sleep 1 ; "
-	"TITLETHREAD=$(echo $FILE | cut -c 1-29) ; "
-	"waitfor -e \"w>$TITLETHREAD\" ; "
-	"mimeset -F \"$FILE\" ; "				// Reset mimetype
-	"hey application/x-vnd.UberTuber pfin ; "
-	"exit");
+	fPlayThread = new WorkerThread(NULL,
+		new BInvoker(new BMessage(msgPLAYCLIP), this));
 
-	command->ReplaceAll("%URL%", fURL->String());
+	entry_ref ref;
+	be_roster->FindApp("video/mpeg4", &ref);
+	BString prefApp = BPath(&ref).Path();
 
-	if (fSavedFlag)
-		command->ReplaceAll("%DIR%", fSaveDir->String());
-	else
-		command->ReplaceAll("%DIR%", "/tmp/ubertuber");
-
-	thread_id playthread = spawn_thread(_call_script, "Clip player",
-		B_LOW_PRIORITY, command);
-
-	if (playthread < B_OK)
-		return;
-	resume_thread(playthread);
+	fPlayThread->AddArgument("settype -t video/mpeg4 &&")
+		->AddArgument(prefApp.String())
+		->AddArgument(fClipPath.String())
+		->AddArgument("&& echo playbackfinished")	// needed?
+		->Run();
 
 	return;
 }

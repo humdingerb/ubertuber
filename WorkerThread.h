@@ -1,41 +1,44 @@
 /*
- * Copyright 2014. All rights reserved.
- * Distributed under the terms of the MIT license.
- *
- * Author:
- *	Humdinger, humdingerb@gmail.com
- *
- * based on ideas of YAVTD for Haiku
- * Version 1.0 by Leszek Lesner (C) 2011
+ * Copyright 2010, BurnItNow Team. All rights reserved.
+ * Distributed under the terms of the MIT License.
  */
+#ifndef _WorkerThread_H_
+#define _WorkerThread_H_
 
-#ifndef WORKERTHREAD_H
-#define WORKERTHREAD_H
 
-#include <Looper.h>
-#include <Messenger.h>
+#include "ObjectList.h"
+
+#include <Invoker.h>
+#include <Locker.h>
 #include <String.h>
 
-#include <signal.h>
-#include <stdlib.h>
-#include <stdio.h>
 
-enum {
-	msgGETCLIP	= 'gclp',
-	msgGETTITLE	= 'gtit',
-	msgTITLE	= 'titl'
-};
-
-
-class WorkerThread : public BLooper {
+class WorkerThread : public BLocker {
 public:
-						WorkerThread(const BMessenger& owner);
-		void			MessageReceived(BMessage* message);
-		
-		BString			_GetTitle(BString url);
-		bool			_GetClip(BString url);
+					WorkerThread(BObjectList<BString>* argList = NULL,
+						BInvoker* invoker = NULL);
+	virtual 		~WorkerThread();
+
+	BObjectList<BString>* Arguments();
+	void 			SetArguments(BObjectList<BString>* argList);
+	WorkerThread*	AddArgument(const char* argument);
+
+	BInvoker* 		Invoker();
+	void 			SetInvoker(BInvoker* invoker);
+
+	status_t 		Run();
+	status_t 		Stop();
+	status_t 		Wait();
+	bool 			IsRunning();
+
 private:
-		BMessenger		fOwner;
+	static int32 	_Thread(void* data);
+	static void 	_ThreadExit(void* data);
+
+	BObjectList<BString>* fArgumentList;
+	BInvoker* 		fInvoker;
+	thread_id 		fThread;
 };
 
-#endif
+
+#endif	// _WorkerThread_H_

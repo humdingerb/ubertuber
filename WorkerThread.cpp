@@ -1,99 +1,209 @@
 /*
- * Copyright 2014. All rights reserved.
- * Distributed under the terms of the MIT license.
- *
- * Author:
- *	Humdinger, humdingerb@gmail.com
- *
- * based on ideas of YAVTD for Haiku
- * Version 1.0 by Leszek Lesner (C) 2011
+ * Copyright 2010-2012, BurnItNow Team. All rights reserved.
+ * Distributed under the terms of the MIT License.
  */
-
 #include "WorkerThread.h"
+#include "CommandPipe.h"
 
+#include <AutoLocker.h>
 
-WorkerThread::WorkerThread(const BMessenger& owner)
-	:
-	BLooper("title_getter"),
-	fOwner(owner)
+bool started = false;
+
+class CommandReader : public BPrivate::BCommandPipe::LineReader
 {
-	Run();
+public:
+	CommandReader(BInvoker* invoker)
+	:
+	fInvoker(invoker) {}
+
+
+	virtual bool IsCanceled()
+	{
+		// TODO Handle cancel
+		return false;
+	}
+
+	virtual status_t ReadLine(const BString& line)
+	{
+		if (fInvoker == NULL)
+			return B_OK;
+
+		BMessage messageCopy(*fInvoker->Message());
+		BString lineCopy(line);
+		lineCopy.RemoveLast("\n");
+		messageCopy.AddString("line", lineCopy);
+		fInvoker->Invoke(&messageCopy);
+
+		return B_OK;
+	}
+
+private:
+	BInvoker* fInvoker;
+};
+
+
+WorkerThread::WorkerThread(BObjectList<BString>* argList, BInvoker* invoker)
+	:
+	fArgumentList(argList),
+	fInvoker(invoker)
+{
+	if (fArgumentList == NULL)
+		fArgumentList = new BObjectList<BString>(5, true);
 }
+
+
+WorkerThread::~WorkerThread()
+{
+	delete fInvoker;
+	delete fArgumentList;
+}
+
+
+BObjectList<BString>*
+WorkerThread::Arguments()
+{
+	AutoLocker<WorkerThread> locker(this);
+	return fArgumentList;
+}
+
+
+#pragma mark -- Public Methods --
 
 
 void
-WorkerThread::MessageReceived(BMessage* message)
+WorkerThread::SetArguments(BObjectList<BString>* argList)
 {
-	switch (message->what) {
-		case msgGETTITLE:
-		{
-			BString url;
-			if (message->FindString("url", &url) == B_OK) {
-				BMessage msg(msgTITLE);
-				msg.AddString("title", _GetTitle(url));
-				fOwner.SendMessage(&msg);
-			}
-			break;
-		}
-		case msgGETCLIP:
-		{
-			BString url;
-			if (message->FindString("url", &url) == B_OK)
-				_GetClip(url);
-			break;
-		}
-		default:
-			BLooper::MessageReceived(message);
-	}
+	AutoLocker<WorkerThread> locker(this);
+	delete fArgumentList;
+	fArgumentList = argList;
 }
 
 
-BString
-WorkerThread::_GetTitle(BString url)
+WorkerThread*
+WorkerThread::AddArgument(const char* argument)
 {
-	BString command("youtube-dl --get-title %URL% 2>&1 | tail -n 1"); // also get output from error out
-	command.ReplaceAll("%URL%", url.String());
+	AutoLocker<WorkerThread> locker(this);
+	fArgumentList->AddItem(new BString(argument));
+	return this;
+}
 
-	char title[1000];
-	FILE* pget_title;
 
-	pget_title = popen(command.String(),"r");
-	fread(title, 1, sizeof(title), pget_title);
-	fclose(pget_title);
+BInvoker*
+WorkerThread::Invoker()
+{
+	AutoLocker<WorkerThread> locker(this);
+	return fInvoker;
+}
 
-	/* strip trailing newline */
-	for (int i = 0; (unsigned) i < strlen(title); i++) {
-		if (title[i] == '\n' || title[i] == '\r' )
-			title[i] = '\0';
-	}
-	return title;
+
+void WorkerThread::SetInvoker(BInvoker* invoker)
+{
+	AutoLocker<WorkerThread> locker(this);
+	delete fInvoker;
+	fInvoker = invoker;
+}
+
+
+status_t
+WorkerThread::Run()
+{
+	AutoLocker<WorkerThread> locker(this);
+
+	// TODO Check if thread is already running
+	fThread = spawn_thread(WorkerThread::_Thread, "command thread",
+		B_NORMAL_PRIORITY, this);
+	if (fThread < B_OK)
+		return B_ERROR;
+
+	if (resume_thread(fThread) != B_OK)
+		return B_ERROR;
+
+	started = true;
+	return B_OK;
+}
+
+
+status_t
+WorkerThread::Stop()
+{
+	AutoLocker<WorkerThread> locker(this);
+	return B_ERROR;
+}
+
+
+status_t
+WorkerThread::Wait()
+{
+	AutoLocker<WorkerThread> locker(this);
+	status_t status;
+	wait_for_thread(fThread, &status);
+	return status;
 }
 
 
 bool
-WorkerThread::_GetClip(BString url)
+WorkerThread::IsRunning()
 {
-	BString* command = new BString(
-	"mkdir -p /tmp/ubertuber ; "
-	"cd /tmp/ubertuber ; "
-	"hey application/x-vnd.UberTuber down ; "
-	"youtube-dl --continue --restrict-filenames --no-part --no-cache-dir --format best %URL% ; "
-	"while [ -n \"$(%TEST%)\" ] ; do " // wait for script to finish/aborted
-	"sleep 2 ; "
-	"done ; "
-	"FILE=$(youtube-dl --restrict-filenames --get-filename %URL% 2>&1 | tail -n 1) ; "
-	"addattr -t string META:url %URL% \"$FILE\" ; "
-	"if [ -e \"$FILE\" ] ; then "
-	"hey application/x-vnd.UberTuber gfin ; "
-	"else hey application/x-vnd.UberTuber erro ; "
-	"fi ; "
-	"exit");
+	return started;
+}
 
-	BString threadtest("ps | grep python | grep \"youtube-dl --con\"");
 
-	command->ReplaceAll("%TEST%", threadtest.String());
-	command->ReplaceAll("%URL%", url.String());
+#pragma mark -- Private Thread Functions --
 
-	system(command->String());
-	return true;
+
+int32
+WorkerThread::_Thread(void* data)
+{
+	on_exit_thread(WorkerThread::_ThreadExit, data);
+
+	WorkerThread* commandThread = static_cast<WorkerThread*>(data);
+	if (commandThread == NULL)
+		return B_ERROR;
+
+	// TODO acquire autolock
+
+	BCommandPipe pipe;
+	BObjectList<BString>* args = commandThread->Arguments();
+
+	for (int32 x = 0; x < args->CountItems(); x++)
+		pipe << *args->ItemAt(x);
+
+	pipe.PrintToStream();
+
+	FILE* stdOutAndErrPipe = NULL;
+
+	thread_id pipeThread = pipe.PipeInto(&stdOutAndErrPipe);
+	if (pipeThread < B_OK)
+		return B_ERROR;
+
+	BPrivate::BCommandPipe::LineReader* reader
+		= new CommandReader(commandThread->Invoker());
+
+	if (pipe.ReadLines(stdOutAndErrPipe, reader) != B_OK) {
+		kill_thread(pipeThread);
+		status_t exitval;
+		wait_for_thread(pipeThread, &exitval);
+		return B_ERROR;
+	}
+	return B_OK;
+}
+
+
+void
+WorkerThread::_ThreadExit(void* data)
+{
+	WorkerThread* commandThread = static_cast<WorkerThread*>(data);
+	if (commandThread == NULL)
+		return;
+
+	BInvoker* invoker = commandThread->Invoker();
+	if (invoker == NULL)
+		return;
+
+	BMessage copy(*invoker->Message());
+
+	// TODO adjust this based on the actual command exit code
+	copy.AddInt32("thread_exit", 0);
+	invoker->Invoke(&copy);
+	started = false;
 }
