@@ -441,8 +441,8 @@ MainWindow::MessageReceived(BMessage* msg)
 		}
 		case msgABORT:
 		{
-			KillThread("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
-			KillThread("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit");
+			KillThread((char*)("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit"));
+			KillThread((char*)("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit"));
 
 			SetStatus(B_TRANSLATE("Aborted"));
 			printf("Download aborted\n");
@@ -466,7 +466,7 @@ MainWindow::MessageReceived(BMessage* msg)
 			if (!fGetFlag && !fGotClipFlag)
 				GetClip();
 
-			PlayClip();
+//			PlayClip();
 			fPlayButton->SetEnabled(false);
 			fPlayMenu->SetEnabled(false);
 			break;
@@ -568,8 +568,8 @@ MainWindow::MessageReceived(BMessage* msg)
 			if (fGetFlag && !fSaveIt) {
 				SetStatus(B_TRANSLATE("Aborted"));
 				fAbortedFlag = true;
-				KillThread("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
-				KillThread("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit");
+				KillThread((char*)("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit"));
+				KillThread((char*)("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit"));
 			}
 			if (fAbortedFlag) {
 				SetStatus(B_TRANSLATE("Aborted"));
@@ -642,6 +642,7 @@ MainWindow::_GetClipOutput(BMessage* message)
 	BString data;
 
 	if (message->FindString("line", &data) == B_OK) {
+		printf("_GetClipOutput %s\n", data.String());
 		if (data.FindFirst("ERROR: ") == 0) {
 			printf("GetClip - Failure: %s\n", data.String());
 			PostMessage(msgABORT);
@@ -689,8 +690,8 @@ MainWindow::QuitRequested()
 		{
 			case 0:	// abort
 			{
-				KillThread("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit");
-				KillThread("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit");
+				KillThread((char*)("ps -o Id Team | grep python | grep youtube-dl | awk '{ print $1; }' ; exit"));
+				KillThread((char*)("ps -o Id Team | grep hey | grep UberTuber | awk '{ print $1; }' ; exit"));
 				break;
 			}
 			case 1:	// continue
@@ -864,8 +865,7 @@ MainWindow::GetClip()
 	fGetClipThread = new WorkerThread(NULL,
 		new BInvoker(new BMessage(msgGETCLIP), this));
 
-	fGetClipThread->AddArgument("youtube-dl")
-		->AddArgument("youtube-dl")
+	fGetClipThread->AddArgument("/bin/youtube-dl")
 		->AddArgument("--continue")
 		->AddArgument("--restrict-filenames")
 		->AddArgument("--no-part")

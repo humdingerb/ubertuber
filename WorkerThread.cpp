@@ -67,7 +67,7 @@ WorkerThread::Arguments()
 }
 
 
-#pragma mark -- Public Methods --
+// #pragma mark - Public Methods
 
 
 void
@@ -148,7 +148,7 @@ WorkerThread::IsRunning()
 }
 
 
-#pragma mark -- Private Thread Functions --
+// #pragma mark - Private Thread Functions
 
 
 int32
