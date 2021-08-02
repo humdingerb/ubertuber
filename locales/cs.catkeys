@@ -1,0 +1,34 @@
+1	Czech	application/x-vnd.humdinger-ubertuber	274134764
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Klip se stále stahuje.\nChcete stahování přerušit nebo pokračovat?
+Abort download	MainWindow		Přerušit stahování
+Abort download?	MainWindow		Přerušit stahování?
+Aborted	MainWindow		Přerušeno
+About UberTuber	MainWindow		O aplikaci UberTuber
+Auto-inserted URL	MainWindow		Automaticky vložené URL
+Auto-play	MainWindow		Automaticky přehrát
+Buffering…	MainWindow		Nahrávání…
+Choose destination folder	MainWindow		Zvolte cílový adresář
+Clear URL field	MainWindow		Smazat řádek URL
+Continue download	MainWindow		Pokračovat ve stahování
+Download failed	MainWindow		Chyba stahování
+Download finished	MainWindow		Stahování dokončeno
+Downloading…	MainWindow		Stahování…
+Edit monitored URLs…	MainWindow		Upravit sledovaná URL…
+File	MainWindow		Soubor
+No URL found	MainWindow		URL nenalezena
+Open URL in browser	MainWindow		Otevřít URL v prohlížeči
+Play	MainWindow		Přehrát
+Playback finished	MainWindow		Přehrávání dokončeno
+Playing…	MainWindow		Přehrávání…
+Quit	MainWindow		Ukončit
+Remove temporary files on quit	MainWindow		Při ukončení odstranit dočasné soubory
+Save as…	MainWindow		Uložit jako…
+Saving complete	MainWindow		Ukládání dokončeno
+Select this folder	MainWindow		Zvolit tento adresář
+Settings	MainWindow		Nastavení
+URL	MainWindow		URL
+URL:	MainWindow		URL:
+Thank you	App		Díky
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber může být spuštěn buď s URL nebo se souborem záložky Web+.\n
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tvytvořeno Humdingerem\n\tzaloženo na Leszekových YAVTD nápadech\n\tCopyright 2011-2015\n\nUberTuber používá skript ke stažení videí z YouTube.\nKlipy mohou být uloženy nebo přímo přehrány. UberTuber sleduje URL ve schránce a nabízí možnost automatického přehrání jakmile je nalezena podporovaná adresa.\n
+UberTuber	System name		UberTuber

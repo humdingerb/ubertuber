@@ -1,0 +1,34 @@
+1	Friulian	application/x-vnd.humdinger-ubertuber	274134764
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Un videoclip al è ancjemò daûr a jessi discjariât.\nInterompi o continuâ a discjariâ?
+Abort download	MainWindow		Interomp discjariament
+Abort download?	MainWindow		Interomp discjariament?
+Aborted	MainWindow		Interot
+About UberTuber	MainWindow		Informazions su UberTuber
+Auto-inserted URL	MainWindow		URL auto-inserît
+Auto-play	MainWindow		Auto-riprodûs
+Buffering…	MainWindow		Jemplament memorie tampon…
+Choose destination folder	MainWindow		Sielç la cartele di destinazion
+Clear URL field	MainWindow		Nete il cjamp dal URL
+Continue download	MainWindow		Continue discjariament
+Download failed	MainWindow		Discjariament falît
+Download finished	MainWindow		Discjariament finît
+Downloading…	MainWindow		Daûr a discjariâ…
+Edit monitored URLs…	MainWindow		Modifiche i URL tignûts di voli…
+File	MainWindow		File
+No URL found	MainWindow		Nissun URL cjatât
+Open URL in browser	MainWindow		Vierç URL tal navigadôr
+Play	MainWindow		Riprodûs
+Playback finished	MainWindow		Riproduzion finide
+Playing…	MainWindow		Daûr a riprodusi…
+Quit	MainWindow		Jes
+Remove temporary files on quit	MainWindow		Gjave i file temporanis ae jessude
+Save as…	MainWindow		Salve come…
+Saving complete	MainWindow		Salvament completât
+Select this folder	MainWindow		Selezione cheste cartele
+Settings	MainWindow		Impostazions
+URL	MainWindow		URL
+URL:	MainWindow		URL:
+Thank you	App		Griacie
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber al pues jessi inviât cun un URL opûr un file di segnelibri di Web+.\n
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tscrit di Humdinger\n\tbasât su lis ideis di Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber al dopre un script par discjariâ i video di YouTube.\nI videoclip a puedin jessi salvâts o riprodots daurman. UberTuber al ten di voli lis notis dal sisteme pai URL apene copiâts e al à une opzion 'Auto-riprodûs' che e inviarà la riproduzion apene che un URL supuartât al ven ricognossût.\n
+UberTuber	System name		UberTuber

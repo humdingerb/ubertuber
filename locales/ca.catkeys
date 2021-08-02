@@ -1,0 +1,34 @@
+1	Catalan	application/x-vnd.humdinger-ubertuber	274134764
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Encara es baixa un vídeo.n\ Voleu avortar o continuar la baixada?
+Abort download	MainWindow		Avorta la baixada
+Abort download?	MainWindow		Voleu avortar la baixada?
+Aborted	MainWindow		Avortada
+About UberTuber	MainWindow		Quant a l'UberTuber
+Auto-inserted URL	MainWindow		URL inserit automàticament
+Auto-play	MainWindow		Reprodueix automàticament
+Buffering…	MainWindow		Es carrega...
+Choose destination folder	MainWindow		Tanca la carpeta de destinació
+Clear URL field	MainWindow		Ha fallat netejar l'URL.
+Continue download	MainWindow		Continua la baixada
+Download failed	MainWindow		Ha fallat la baixada.
+Download finished	MainWindow		Ha acabat la baixada.
+Downloading…	MainWindow		Es baixa...
+Edit monitored URLs…	MainWindow		Edita els URL monitorats...
+File	MainWindow		Fitxer
+No URL found	MainWindow		No s'ha trobat cap URL.
+Open URL in browser	MainWindow		Obre l'URL al navegador
+Play	MainWindow		Reprodueix
+Playback finished	MainWindow		Ha acabat la reproducció
+Playing…	MainWindow		Es reprodueix...
+Quit	MainWindow		Surt
+Remove temporary files on quit	MainWindow		Suprimeix els fitxers temporals en sortir.
+Save as…	MainWindow		Desa com a...
+Saving complete	MainWindow		Ja s'ha desat.
+Select this folder	MainWindow		Selecciona aquesta carpeta
+Settings	MainWindow		Paràmetres
+URL	MainWindow		URL
+URL:	MainWindow		URL:
+Thank you	App		Gràcies
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber es pot iniciar amb un URL o amb un fitxer de marcador web+.\n
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tescrit per Humdinger\n\tbasat en idees de Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber usa un script per baixar vídeos de YouTube.\nEls vídeos es poden desar o reproduir directament. UberTuber monitora el porta-retalls del sistema per als URL recentment copiats i té una opció de reproducció automàtica que començarà tan bon punt es detecti un URL admès..\n
+UberTuber	System name		UberTuber

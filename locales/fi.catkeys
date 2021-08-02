@@ -1,0 +1,34 @@
+1	Finnish	application/x-vnd.humdinger-ubertuber	274134764
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Leikettä ladataan yhä.\nHaluatko keskeyttää vai jatkaa latausta?
+Abort download	MainWindow		Keskeytä lataus
+Abort download?	MainWindow		Keskeytetäänkö lataus?
+Aborted	MainWindow		Keskeytetty
+About UberTuber	MainWindow		Ohjelmasta UberTuber
+Auto-inserted URL	MainWindow		Lisää verkko-osoite automaattisesti
+Auto-play	MainWindow		Soita automaattisesti
+Buffering…	MainWindow		Puskuroidaan…
+Choose destination folder	MainWindow		Valitse kohdekansio
+Clear URL field	MainWindow		Tyhjennä verkko-osoitekenttä
+Continue download	MainWindow		Jatka lataamista
+Download failed	MainWindow		Lataus epäonnistui
+Download finished	MainWindow		Lataus päättynyt
+Downloading…	MainWindow		Ladataan…
+Edit monitored URLs…	MainWindow		Muokkaa valvottuja verkko-osoitteita…
+File	MainWindow		Tiedosto
+No URL found	MainWindow		Verkko-osoitetta ei löytynyt
+Open URL in browser	MainWindow		Avaa verkko-osoite selaimessa
+Play	MainWindow		Soita
+Playback finished	MainWindow		Toisto päättynyt
+Playing…	MainWindow		Soitetaan…
+Quit	MainWindow		Poistu
+Remove temporary files on quit	MainWindow		Poista tilapäiset tiedostot ohjelman sulkeutuessa
+Save as…	MainWindow		Tallenna nimellä…
+Saving complete	MainWindow		Tallentaminen päättynyt
+Select this folder	MainWindow		Valitse tämä kansio
+Settings	MainWindow		Asetukset
+URL	MainWindow		Verkko-osoite
+URL:	MainWindow		Verkko-osoite:
+Thank you	App		Kiitos
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber voidaan käynnistää joko verkko-osoitteesta tai Web+-kirjanmerkkitiedostosta.\n
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\ttekijä: Humdinger\n\tperustuu Leszek:in YAVTD-ideaan\n\tCopyright 2011-2015\n\nUberTuber käyttää skriptiä lataamaan YouTube-videoita.\nLeikkeet voidaan tallentaa tai toistaa heti. UberTuber seuraa järjestelmän leikepöydän äskettäin kopioituja verkko-osoitteita ja siinä on 'Soita automaattisesti'-valitsin, joka käynnistää toiston heti kun tuettu verkko-osoite on havaittu.\n
+UberTuber	System name		UberTuber

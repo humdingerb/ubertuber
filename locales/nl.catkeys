@@ -1,0 +1,34 @@
+1	Dutch	application/x-vnd.humdinger-ubertuber	274134764
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		De download van een clip is nog bezig.\nWilt u de deze afbreken of doorgaan met de download?
+Abort download	MainWindow		Download afbreken
+Abort download?	MainWindow		Download afbreken?
+Aborted	MainWindow		Afgebroken
+About UberTuber	MainWindow		Over UberTuber
+Auto-inserted URL	MainWindow		Auto-ingevoegde URL
+Auto-play	MainWindow		Auto-afspelen
+Buffering…	MainWindow		Bufferen…
+Choose destination folder	MainWindow		Kies doelmap
+Clear URL field	MainWindow		URL-veld wissen
+Continue download	MainWindow		Download hervatten
+Download failed	MainWindow		Download mislukt
+Download finished	MainWindow		Download gereed
+Downloading…	MainWindow		Downloaden…
+Edit monitored URLs…	MainWindow		Bewerk te controleren URLs…
+File	MainWindow		Bestand
+No URL found	MainWindow		Geen URL gevonden
+Open URL in browser	MainWindow		Open URL in browser
+Play	MainWindow		Afspelen
+Playback finished	MainWindow		Afspelen gereed
+Playing…	MainWindow		Afspelen…
+Quit	MainWindow		Afsluiten
+Remove temporary files on quit	MainWindow		Verwijder tijdelijke bestanden bij afsluiten
+Save as…	MainWindow		Opslaan als…
+Saving complete	MainWindow		Opslaan gereed
+Select this folder	MainWindow		Kies deze map
+Settings	MainWindow		Instellingen
+URL	MainWindow		URL
+URL:	MainWindow		URL:
+Thank you	App		Bedankt
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber kan gestart worden met een URL dan wel een Web+ Bladwijzer-bestand.\n
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tgeschreven door Humdinger\n\tgebaseerd op ideeën van Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber maakt gebruik van een script om YouTube-videos te downloaden.\nClips kunnen worden opgeslagen of direct worden afgespeeld. UberTuber controleert het systeem-klembord op nieuw gekopieerde URLs en heeft een 'Auto-afspelen'-optie welke het afspelen start zodra een ondersteunde URL wordt gedetecteerd.\n
+UberTuber	System name		UberTuber

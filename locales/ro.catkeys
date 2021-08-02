@@ -1,0 +1,34 @@
+1	Romanian	application/x-vnd.humdinger-ubertuber	274134764
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Un clip se descarcă încă.\nDoriți să anulați sau să continuați descărcarea?
+Abort download	MainWindow		Anulează descărcarea
+Abort download?	MainWindow		Anulează descărcarea?
+Aborted	MainWindow		Anulat
+About UberTuber	MainWindow		Despre UberTuber
+Auto-inserted URL	MainWindow		URL auto-inserat
+Auto-play	MainWindow		Auto-redare
+Buffering…	MainWindow		Preîncărcare...
+Choose destination folder	MainWindow		Alegeți dosarul destinație
+Clear URL field	MainWindow		Clear URL field
+Continue download	MainWindow		Continuă descărcarea
+Download failed	MainWindow		Descărcarea a eșuat
+Download finished	MainWindow		Descărcare terminată
+Downloading…	MainWindow		Se descarcă...
+Edit monitored URLs…	MainWindow		Editare URL-uri monitorizate...
+File	MainWindow		Fișier
+No URL found	MainWindow		Nu s-a găsit URL
+Open URL in browser	MainWindow		Deschide URL în browser
+Play	MainWindow		Redă
+Playback finished	MainWindow		Redare terminată
+Playing…	MainWindow		Redare...
+Quit	MainWindow		Ieșire
+Remove temporary files on quit	MainWindow		Elimină fișierele temporare la ieșire
+Save as…	MainWindow		Salvează ca...
+Saving complete	MainWindow		Salvare completă
+Select this folder	MainWindow		Alege acest dosar
+Settings	MainWindow		Configurări
+URL	MainWindow		URL
+URL:	MainWindow		URL:
+Thank you	App		Mulțumesc
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber poate fi lansat fie cu un URL sau un fișier favorit Web+.\n
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tscris de Humdinger\n\tbazat pe ideile a YAVTD a lui Leszek\n\tDrepturi de autor 2011-2015\n\nUberTuber utilizează un script pentru a descărca video-uri de pe YouTube.\nClipurile pot fi salvate sau redate direct. UberTuber monitorizează clipboardul sistemului pentru URL-uri copiate recent și are o opțiune „Auto-redare” care va începe redarea de îndată ce se detectează un URL suportat.\n
+UberTuber	System name		UberTuber
