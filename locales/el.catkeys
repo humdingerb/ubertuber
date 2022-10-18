@@ -1,0 +1,34 @@
+1	Greek (Modern)	application/x-vnd.humdinger-ubertuber	274134764
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Αυτήν την στιγμή υπάρχει μια λήψη που βρίσκεται σε εξέλιξη.\nΘέλετε να ακυρώσετε την λήψη ή να την συνεχίσετε;
+Abort download	MainWindow		Ακύρωση λήψης
+Abort download?	MainWindow		Ακύρωση λήψης;
+Aborted	MainWindow		Ακυρώθηκε
+About UberTuber	MainWindow		Σχετικά με το UberTuber
+Auto-inserted URL	MainWindow		Αυτόματα επικολλημένο URL
+Auto-play	MainWindow		Αυτόματη αναπαραγωγή
+Buffering…	MainWindow		Φόρτωση...
+Choose destination folder	MainWindow		Επιλογή προορισμού
+Clear URL field	MainWindow		Άδειασμα πεδίου URL
+Continue download	MainWindow		Συνέχεια λήψης
+Download failed	MainWindow		Η λήψη απέτυχε
+Download finished	MainWindow		Η λήψη ολοκληρώθηκε
+Downloading…	MainWindow		Λήψη σε εξέλιξη...
+Edit monitored URLs…	MainWindow		Επεξεργασία λίστας URL σε παρακολούθηση...
+File	MainWindow		Αρχείο
+No URL found	MainWindow		Δεν βρέθηκε υπερσύνδεσμος
+Open URL in browser	MainWindow		Άνοιγμα υπερσυνδέσμου στον περιηγητή
+Play	MainWindow		Αναπαραγωγή
+Playback finished	MainWindow		Η αναπαραγωγή τέλειωσε
+Playing…	MainWindow		Γίνεται αναπαραγωγή...
+Quit	MainWindow		Έξοδος
+Remove temporary files on quit	MainWindow		Διαγραφή προσωρινών αρχείων κατά την έξοδο
+Save as…	MainWindow		Αποθήκευση ως...
+Saving complete	MainWindow		Η αποθήκευση ολοκληρώθηκε
+Select this folder	MainWindow		Επιλογή φακέλου
+Settings	MainWindow		Ρυθμίσεις
+URL	MainWindow		URL
+URL:	MainWindow		URL:
+Thank you	App		Ευχαριστούμε
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		Μπορείτε να ανοίξετε το UberTuber σε ένα URL ή ένα σελιδοδείκτη του Web+.\n
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tδημιουργήθηκε από τον Humdinger\n\tβασισμένο στο Leszek's YAVTD\n\tCopyright 2011-2015\n\nΤο UberTuberχρησιμοποιεί ένα σενάριο για να κατεβάζει βίντεο από το YouTube.\nΤα βίντεο μπορούν να αποθηκευτούν ή να αναπαραχθούν απευθείας. Το UberTuber παρακολουθεί το πρόχειρο για να εντοπίσει διευθύνσεις URL και έχει ειδική επιλογή η οποία θα αρχίσει αυτόματα την αναπαραγωγή μόλις ένα υποστηριζόμενο URL αντιγραφεί στο πρόχειρο.\n
+UberTuber	System name		UberTuber

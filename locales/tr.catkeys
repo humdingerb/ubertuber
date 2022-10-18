@@ -1,0 +1,34 @@
+1	Turkish	application/x-vnd.humdinger-ubertuber	274134764
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Bir klip hâlâ indiriliyor. İptal etmek mi yoksa indirmeyi sürdürmek mi istiyorsunuz?
+Abort download	MainWindow		İndirmeyi iptal et
+Abort download?	MainWindow		İndirme iptal edilsin mi?
+Aborted	MainWindow		İptal edildi
+About UberTuber	MainWindow		UberTuber hakkında
+Auto-inserted URL	MainWindow		Kendiliğinden eklenen URL
+Auto-play	MainWindow		Kendiliğinden oynat
+Buffering…	MainWindow		Arabelleğe alınıyor…
+Choose destination folder	MainWindow		Hedef klasörü seçin
+Clear URL field	MainWindow		URL alanını temizle
+Continue download	MainWindow		İndirmeyi sürdür
+Download failed	MainWindow		İndirme başarısız
+Download finished	MainWindow		İndirme tamamlandı
+Downloading…	MainWindow		İndiriliyor…
+Edit monitored URLs…	MainWindow		Gözetlenen URL'leri düzenle…
+File	MainWindow		Dosya
+No URL found	MainWindow		URL bulunamadı
+Open URL in browser	MainWindow		URL'yi tarayıcıda aç
+Play	MainWindow		Oynat
+Playback finished	MainWindow		Oynatma tamamlandı
+Playing…	MainWindow		Oynatılıyor…
+Quit	MainWindow		Çık
+Remove temporary files on quit	MainWindow		Çıkarken geçici dosyaları kaldır
+Save as…	MainWindow		Farklı kaydet…
+Saving complete	MainWindow		Kaydetme tamamlandı
+Select this folder	MainWindow		Bu klasörü seç
+Settings	MainWindow		Ayarlar
+URL	MainWindow		URL
+URL:	MainWindow		URL:
+Thank you	App		Teşekkürler
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber bir URL ile veya bir Web+ yer imi dosyası ile çalıştırılabilir.\n
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tHumdinger tarafından\n\tLeszek'in YAVTD'si temelli fikirlere dayanarak yazıldı\n\tTelif hakkı 2011-2015\n\nUberTuber, YouTube videolarını indirmek için bir betik kullanır.\nKlipler kaydedilebilir veya doğrudan oynatılabilir. UberTuber, kopyalanan URL'leri yakalayabilmek için sistem panosunu gözetler ve desteklenen URL'nin kopyalanması durumunda kendiliğinden oynatmayı başlatmak için bir 'Kendiliğinden oynat' seçeneği içerir.\n
+UberTuber	System name		ÜberTüber

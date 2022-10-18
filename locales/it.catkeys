@@ -1,0 +1,34 @@
+1	Italian	application/x-vnd.humdinger-ubertuber	274134764
+A clip is still being downloaded.\nDo you want to abort or continue the download?	MainWindow		Il download di un filmato è ancora in corso.\nLo vuoi interrompere o proseguire?
+Abort download	MainWindow		Interrompi download
+Abort download?	MainWindow		Interrompere download?
+Aborted	MainWindow		Interrotto
+About UberTuber	MainWindow		Informazioni su UberTuber
+Auto-inserted URL	MainWindow		URL inserita automaticamente
+Auto-play	MainWindow		Riproduci automaticamente
+Buffering…	MainWindow		Memorizzazione buffer…
+Choose destination folder	MainWindow		Seleziona cartella di destinazione
+Clear URL field	MainWindow		Pulisci campo URL
+Continue download	MainWindow		Prosegui download
+Download failed	MainWindow		Download fallito
+Download finished	MainWindow		Download completato
+Downloading…	MainWindow		Download…
+Edit monitored URLs…	MainWindow		Modifica URL monitorate…
+File	MainWindow		File
+No URL found	MainWindow		Nessuna URL trovata
+Open URL in browser	MainWindow		Apri URL nel browser
+Play	MainWindow		Riproduci
+Playback finished	MainWindow		Riproduzione completata
+Playing…	MainWindow		Riproduzione…
+Quit	MainWindow		Esci
+Remove temporary files on quit	MainWindow		Rimuovi file temporanei all'uscita
+Save as…	MainWindow		Salve come…
+Saving complete	MainWindow		Salvataggio completato
+Select this folder	MainWindow		Seleziona questa cartella
+Settings	MainWindow		Impostazioni
+URL	MainWindow		URL
+URL:	MainWindow		URL:
+Thank you	App		Grazie
+UberTuber can be launched with either a URL or a Web+ Bookmark file.\n	App		UberTuber può essere avviato sia tramite URL sia tramite un segnalibro di WebPositive.\n
+UberTuber v0.9.11\n\twritten by Humdinger\n\tbased on ideas of Leszek's YAVTD\n\tCopyright 2011-2015\n\nUberTuber uses a script to download YouTube videos.\nClips can be saved or played back directly. UberTuber monitors the system clipboard for newly copied URLs and has an 'Auto-play' option that'll start playback as soon as a supported URL is detected.\n	App		UberTuber v0.9.11\n\tscritto da Humdinger\n\tconcettualmente basato su YAVTD di Leszek\n\tCopyright 2011-2015\n\nUberTuber usa uno script per scaricare video da YouTube.\nI filmati possono essere salvati o riprodotti direttamente. UberTuber monitora gli appunti di sistema in cerca di URL recentemente copiate e ha un'opzione di riproduzione automatica avviata appena viene rilevata una URL compatibile.\n
+UberTuber	System name		UberTuber
