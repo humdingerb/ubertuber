@@ -1,3 +1,9 @@
+* * *
+This repository is in archived, read-only mode.
+UberTuber development continues to rest at [Codeberg](https://codeberg.org/humdinger/ubertuber).
+* * *
+
+
 ![UberTuber icon](./images/ubertuber_icon_64.png) **UberTuber** for [Haiku](http://www.haiku-os.org)
 
 * * *
